@@ -1,0 +1,19 @@
+.profile__button {
+    width: 234px;
+    height: 40px;
+    background-color: rgba(43, 46, 54, 1);
+    border-radius: 12px;
+    border: none;
+    color: white;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+    padding: 0;
+}
+
+.profile__button:nth-child(2) {
+    background-color: rgba(89, 120, 199, 1);
+    margin-left: 10px;
+}

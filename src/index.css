@@ -20,3 +20,23 @@ code {
 @import url("./blocks/header/header.css");
 @import url("./blocks/header/__logo/header__logo.css");
 @import url("./blocks/header/__name/header__name.css");
+@import url("./blocks/header/__link/header__link.css");
+@import url("./blocks/header/__links/header__links.css");
+
+@import url("./blocks/navbar/navbar.css");
+@import url("./blocks/navbar/__icon/navbar__icon.css");
+@import url("./blocks/navbar/__icon/_notifications/navbar__icon_notifications.css");
+@import url("./blocks/navbar/__icon/_profile/navbar__icon_profile.css");
+@import url("./blocks/navbar/__icon/_search/navbar__icon_search.css");
+
+@import url("./blocks/profile/profile.css");
+@import url("./blocks/profile/__info/profile__info.css");
+@import url("./blocks/profile/__avatar/profile__avatar.css");
+@import url("./blocks/profile/__text/profile__text.css");
+@import url("./blocks/profile/__text/_name/profile__text_name.css");
+@import url("./blocks/profile/__text/_nick/profile__text_nick.css");
+@import url("./blocks/profile/__actions/profile__actions.css");
+@import url("./blocks/profile/__button/profile__button.css");
+@import url("./blocks/profile/__stats/profile__stats.css");
+@import url("./blocks/profile/__stat/profile__stat.css");
+@import url("./blocks/profile/__stat-text/profile__stat-text.css");

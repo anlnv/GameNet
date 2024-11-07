@@ -1,0 +1,10 @@
+.profile__stat-text {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #A3A6B3;
+    padding: 0;
+    margin: 0;
+    padding-top: 8px;
+}

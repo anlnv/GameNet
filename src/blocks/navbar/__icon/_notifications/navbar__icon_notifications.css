@@ -1,0 +1,7 @@
+.navbar__icon_notifications {
+    background-color: rgba(43, 46, 54, 1);
+    border-radius: 12px;
+    background-image: url('../../../../images/button-notifications.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}

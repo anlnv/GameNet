@@ -1,0 +1,12 @@
+.header__link {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+}
+
+.header__link:nth-child(n+2) {
+    margin-left: 36px;
+}
