@@ -40,3 +40,12 @@ code {
 @import url("./blocks/profile/__stats/profile__stats.css");
 @import url("./blocks/profile/__stat/profile__stat.css");
 @import url("./blocks/profile/__stat-text/profile__stat-text.css");
+
+@import url("./blocks/statistics/statistics.css");
+@import url("./blocks/progress/__fill/progress__fill.css");
+@import url("./blocks/progress/progress.css");
+@import url("./blocks/statistics/__item/statistics__item.css");
+@import url("./blocks/statistics/__label/statistics__label.css");
+
+@import url("./blocks/userwall/userwall.css");
+@import url("./blocks/posts-form/posts-form.css");

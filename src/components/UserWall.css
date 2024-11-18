@@ -1,0 +1,117 @@
+/* Основной контейнер */
+
+  
+  
+  
+  /* Форма для создания постов */
+ 
+  
+  .new-post-form textarea {
+    width: 100%;
+    background: #333;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 10px;
+    color: #fff;
+    font-size: 16px;
+    resize: none;
+    height: 80px;
+    margin-bottom: 10px;
+  }
+  
+  .new-post-form .form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .new-post-form .upload-button {
+    background: #444;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .new-post-form .upload-button input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .new-post-form button {
+    background: #3b82f6;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .new-post-form button:hover {
+    background: #2563eb;
+  }
+  
+  /* Превью изображения */
+  .image-preview {
+    margin-top: 10px;
+  }
+  
+  .image-preview img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .image-preview button {
+    background: #e53e3e;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  /* Лента постов */
+  .posts-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /*.post {
+    background: #2a2a2a;
+    padding: 15px;
+    border-radius: 8px;
+  }*/
+
+  .post {
+    width: 100%;
+    max-width: 600px;
+    padding: 15px;
+    background: #2a2a2a;
+    border-radius: 8px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .post img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+  
+  .post-date {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+    display: block;
+  }
+  
