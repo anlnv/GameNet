@@ -26,7 +26,7 @@ code {
 @import url("./blocks/navbar/navbar.css");
 @import url("./blocks/navbar/__icon/navbar__icon.css");
 @import url("./blocks/navbar/__icon/_notifications/navbar__icon_notifications.css");
-@import url("./blocks/navbar/__icon/_profile/navbar__icon_profile.css");
+@import url("./blocks/navbar/__icon/_settings/navbar__icon_settings.css");
 @import url("./blocks/navbar/__icon/_search/navbar__icon_search.css");
 
 @import url("./blocks/profile/profile.css");
@@ -49,3 +49,14 @@ code {
 
 @import url("./blocks/userwall/userwall.css");
 @import url("./blocks/posts-form/posts-form.css");
+@import url("./blocks/upload-button/upload-button.css");
+@import url("./blocks/photo-form/phoro-form.css");
+
+@import url("./blocks/remove-button/remove-button.css");
+@import url("./blocks/image-preview/image-preview.css");
+
+@import url("./blocks/posts/posts.css");
+@import url("./blocks/posts/__item/posts__item.css");
+
+@import url("./blocks/settings-popup/settings-popup.css");
+@import url("./blocks/settings-popup/__item/settings-popup__item.css");

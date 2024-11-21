@@ -1,19 +1,37 @@
 import React, { useState } from "react";
 
-const UserWall = () => {
+const Feed = () => {
   const [posts, setPosts] = useState([
     {
       id: 1,
-      text: "мили котик!",
+      text: "котик",
       image: "https://avatars.mds.yandex.net/i?id=f64710d1da958f2fc884be6cb109e1faa58442e8ddd00328-5268818-images-thumbs&n=13",
-      date: "July 21, 2024 at 08:28 PM",
+      date: "October 2, 2024 at 03:27 PM",
     },
     {
       id: 2,
       text: "Finally completed The Witcher 3. What an amazing journey!",
       image: null,
-      date: "May 21, 2024 at 05:27 PM",
+      date: "September 1, 2024 at 09:29 PM",
     },
+    {
+        id: 3,
+        text: "а это я в ведьмака играл",
+        image: "https://blog.eldorado.ru/storage/publication/0/38/KHdDn1hnCPfL8qVpleY4WxDYK2PuUtEeL5DFhi08.jpeg",
+        date: "August 21, 2024 at 05:27 PM",
+      },
+      {
+        id: 4,
+        text: "я люблю майнкрафт",
+        image: "https://cdn.lifehacker.ru/wp-content/uploads/2019/04/Kak-sozdat-server-Minecraft-poshagovaya-instrukciya-1_1555677917.jpg",
+        date: "July 21, 2024 at 08:28 PM",
+      },
+      {
+        id: 5,
+        text: "это я сижу играю",
+        image: "https://avatars.mds.yandex.net/i?id=a25bced766f6abd24e1df7d8721d48b9_l-12216082-images-thumbs&n=13",
+        date: "May 21, 2024 at 05:27 PM",
+      },
   ]);
 
   const [newPostText, setNewPostText] = useState("");
@@ -55,7 +73,7 @@ const UserWall = () => {
 
   return (
     <div className="userwall">
-      <h2>User Wall</h2>
+      <h2>Feed</h2>
 
       <form className="posts-form" onSubmit={handlePostSubmit}>
         <textarea
@@ -99,4 +117,4 @@ const UserWall = () => {
   );
 };
 
-export default UserWall;
+export default Feed;

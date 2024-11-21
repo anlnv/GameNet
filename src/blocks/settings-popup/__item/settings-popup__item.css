@@ -1,0 +1,12 @@
+.settings-popup__item {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+  
+  .settings-popup__item:hover {
+    background-color: #444;
+  }
