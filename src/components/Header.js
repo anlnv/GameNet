@@ -24,7 +24,7 @@ function Header() {
       <div className="header__links">
         <Link to="/home" className="header__link">Home</Link>
         <Link to="/feed" className="header__link">Feed</Link>
-        <Link to="/founder" className="header__link">Founder</Link>
+        <Link to="/finder" className="header__link">Finder</Link>
       </div>
       <nav className="navbar">
         <button className="navbar__icon navbar__icon_search"></button>

@@ -1,0 +1,43 @@
+.survey {
+    max-width: 600px;
+    margin:100px auto;
+    padding: 20px;
+    background-color: rgba(43, 46, 54, 1);
+    color: white;
+    border-radius: 10px;
+  }
+  
+  .survey h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .survey-content label {
+    display: block;
+    margin: 10px 0;
+  }
+  
+  .survey-content input {
+    margin-right: 10px;
+  }
+  
+  .survey-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .survey-navigation button {
+    padding: 10px 20px;
+    background-color: rgba(108, 117, 245, 1);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .survey-navigation button:hover {
+    /*background-color: #444;*/
+    opacity: 0.8;
+  }
+  

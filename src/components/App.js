@@ -4,7 +4,9 @@ import Profile from "./Profile";
 import Statistics from "./Statistics";
 import UserWall from "./UserWall";
 import Feed from "./Feed";
-import ProfileSettings from "./ProfileSettings"; // Импортируем компонент настроек профиля
+import ProfileSettings from "./ProfileSettings";
+import Survey from "./Survey";
+import Finder from "./Finder";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -16,7 +18,7 @@ function App() {
   });
 
   const updateProfile = (updatedData) => {
-    setProfileData(updatedData); // Обновляем данные профиля
+    setProfileData(updatedData);
   };
 
   return (
@@ -48,6 +50,24 @@ function App() {
               <ProfileSettings
                 profileData={profileData}
                 updateProfile={updateProfile}
+              />
+            </div>
+          }
+        />
+        <Route
+          path="/survey"
+          element={
+            <div>
+              <Survey
+              />
+            </div>
+          }
+        />
+        <Route
+          path="/finder"
+          element={
+            <div>
+              <Finder
               />
             </div>
           }

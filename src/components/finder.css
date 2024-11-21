@@ -1,0 +1,67 @@
+.finder {
+    text-align: center;
+    padding: 20px;
+    /*display: flex;
+    flex-direction: column;
+    justify-content: center;*/
+  }
+  
+  .lets-go-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .lets-go-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .recommendations {
+    margin-top: 20px;
+  }
+  
+  .recommendations h2 {
+    margin-bottom: 10px;
+  }
+  
+  .user-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 300px;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .user-info img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  
+  .add-friend-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .add-friend-btn:hover {
+    background-color: #0056b3;
+  }
+  

@@ -23,30 +23,32 @@ function ProfileSettings({ profileData, updateProfile }) {
     <div className="profile-settings">
       <h2>Profile Settings</h2>
       <div className="profile-settings__form">
-        <label>
+        <label className="profile-settings__label">
           Name:
           <input
+            className="profile-settings__input"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </label>
-        <label>
+        <label  className="profile-settings__label">
           Nickname:
           <input
+            className="profile-settings__input"
             type="text"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
           />
         </label>
-        <label>
+        <label className="profile-settings__label profile-settings__label_avatar">
           Avatar:
           <input type="file" onChange={handleImageChange} />
         </label>
         <div className="profile-settings__avatar-preview">
           <img src={avatar} alt="Avatar preview" />
         </div>
-        <button onClick={handleSave}>Save Changes</button>
+        <button className="profile-settings__save-button" onClick={handleSave}>Save Changes</button>
       </div>
     </div>
   );
