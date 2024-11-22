@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+/*import React, { useState } from "react";
 import './finder.css';
 
 function Finder() {
@@ -51,4 +51,86 @@ function Finder() {
   );
 }
 
+export default Finder;*/
+
+
+import React, { useState } from "react";
+import './finder.css';
+
+function Finder() {
+  const [showRecommendations, setShowRecommendations] = useState(false);
+  const [recommendedUsers, setRecommendedUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const fetchRecommendedUsers = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found. Please log in.");
+      }
+      const response = await fetch("http://87.242.103.34:5000/rs/find", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch recommended users");
+      }
+
+      const data = await response.json();
+      setRecommendedUsers(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLetsGoClick = () => {
+    fetchRecommendedUsers();
+    setShowRecommendations(true);
+  };
+
+  const handleAddFriend = (userName) => {
+    alert(`${userName} добавлен в друзья!`);
+  };
+
+  return (
+    <div className="finder">
+      <h1>Find your teammates</h1>
+      {!showRecommendations ? (
+        <button className="lets-go-btn" onClick={handleLetsGoClick}>
+          Let's go
+        </button>
+      ) : (
+        <div className="recommendations">
+          <h2>Recommended Users</h2>
+          {loading && <p>Loading...</p>}
+          {error && <p className="error-message">{error}</p>}
+          <ul>
+            {recommendedUsers.map((user, index) => (
+              <li key={index} className="user-item">
+                <div className="user-info">
+                  <span>{user.username}</span>
+                </div>
+                <button
+                  className="add-friend-btn"
+                  onClick={() => handleAddFriend(user.username)}
+                >
+                  +
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default Finder;
+

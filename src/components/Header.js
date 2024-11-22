@@ -7,14 +7,14 @@ function Header() {
   let hideTimeout = null;
 
   const handleMouseEnter = () => {
-    clearTimeout(hideTimeout); // Отменяем таймер скрытия, если он запущен
+    clearTimeout(hideTimeout);
     setShowSettings(true);
   };
 
   const handleMouseLeave = () => {
     hideTimeout = setTimeout(() => {
       setShowSettings(false);
-    }, 2000); // Устанавливаем задержку в 2 секунды
+    }, 2000);
   };
 
   return (
@@ -34,7 +34,6 @@ function Header() {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          {/* Попап настроек */}
           {showSettings && (
             <div className="settings-popup" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
               <Link to="/profile-settings" className="settings-popup__item">Profile Settings</Link>
