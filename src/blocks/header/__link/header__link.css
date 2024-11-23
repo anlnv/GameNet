@@ -10,3 +10,8 @@
 .header__link:nth-child(n+2) {
     margin-left: 36px;
 }
+
+.header__link:hover {
+    opacity: 0.8;
+    color: rgb(55, 57, 68);
+}

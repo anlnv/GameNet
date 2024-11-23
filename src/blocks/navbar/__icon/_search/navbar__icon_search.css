@@ -4,4 +4,9 @@
     background-image: url('./../../../../images/button-search.svg');
     background-repeat: no-repeat;
     background-position: center;
+    cursor: pointer;
+}
+
+.navbar__icon_search:hover {
+    opacity: 0.8;
 }

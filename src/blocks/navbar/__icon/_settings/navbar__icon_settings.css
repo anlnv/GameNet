@@ -4,4 +4,9 @@
     background-image: url('../../../../images/icons8-settings-40.svg');
     background-repeat: no-repeat;
     background-position: center;
+    cursor: pointer;
+}
+
+.navbar__icon_setting:hover {
+    opacity: 0.8;
 }

@@ -4,4 +4,9 @@
     background-image: url('../../../../images/button-notifications.svg');
     background-repeat: no-repeat;
     background-position: center;
+    cursor: pointer;
+}
+
+.navbar__icon_notifications:hover {
+    opacity: 0.8;
 }
