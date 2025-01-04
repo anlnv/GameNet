@@ -298,7 +298,7 @@ function App() {
 
 export default App;*/
 
-
+/*
 import React, { useState, useEffect } from "react";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import Header from "./Header";
@@ -436,6 +436,127 @@ function App() {
                 <ProfileSettings
                   profileData={profileData}
                   updateProfile={updateProfile}
+                />
+              }
+            />
+            <Route path="/survey" element={<Survey />} />
+            <Route path="/finder" element={<Finder />} />
+            <Route path="*" element={<Navigate to="/home" />} />
+          </>
+        )}
+      </Routes>
+    </div>
+  );
+}
+
+export default App;*/
+
+import React, { useState, useEffect } from "react";
+import { Route, Routes, Navigate, useLocation, useNavigate } from "react-router-dom";
+import Header from "./Header";
+import Profile from "./Profile";
+import UserWall from "./UserWall";
+import Feed from "./Feed";
+import ProfileSettings from "./ProfileSettings";
+import Survey from "./Survey";
+import Finder from "./Finder";
+import Login from "./Login";
+import Register from "./Register";
+
+function App() {
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
+
+  const navigate = useNavigate();
+
+  // Функция проверки токена при загрузке приложения
+  const checkAuth = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await fetch("http://87.242.103.34:5000/user/me", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setProfileData(data);
+          setIsLoggedIn(true);
+        } else {
+          localStorage.removeItem("token"); // Невалидный токен
+        }
+      } catch (err) {
+        console.error("Ошибка проверки авторизации:", err);
+        localStorage.removeItem("token");
+      }
+    }
+    setIsAuthChecked(true);
+    setLoading(false);
+  };
+
+  // Выполняем проверку токена при загрузке приложения
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const handleLoginSuccess = (token) => {
+    localStorage.setItem("token", token);
+    setIsLoggedIn(true);
+    checkAuth();
+    navigate("/home");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    setProfileData(null);
+    navigate("/login");
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div className="page">
+      {isLoggedIn && <Header onLogout={handleLogout} />}
+      <Routes>
+        {!isLoggedIn ? (
+          <>
+            {isAuthChecked && (
+              <>
+                <Route
+                  path="/login"
+                  element={<Login onLoginSuccess={handleLoginSuccess} />}
+                />
+                <Route path="/register" element={<Register />} />
+                <Route path="*" element={<Navigate to="/login" />} />
+              </>
+            )}
+          </>
+        ) : (
+          <>
+            <Route
+              path="/home"
+              element={
+                <div>
+                  <Profile profileData={profileData} />
+                  <UserWall />
+                </div>
+              }
+            />
+            <Route path="/feed" element={<Feed />} />
+            <Route
+              path="/profile-settings"
+              element={
+                <ProfileSettings
+                  profileData={profileData}
+                  updateProfile={checkAuth}
                 />
               }
             />

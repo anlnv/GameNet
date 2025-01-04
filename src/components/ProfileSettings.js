@@ -61,6 +61,13 @@ import "./ps.css";
 
 function ProfileSettings({ profileData, updateProfile }) {
   const [username, setUsername] = useState(profileData.username);
+  const [email, setEmail] = useState(profileData.email);
+  const [gender, setGender] = useState(profileData.gender);
+  const [purpose, setPurpose] = useState(profileData.purpose);
+  const [self_assessment_lvl, setSelfAssesmentLevel] = useState(profileData.self_assessment_lvl);
+  const [preferred_communication, setPreferredCommunication] = useState(profileData.preferred_communication);
+  const [hours_per_week, setHours] = useState(profileData.hours_per_week);
+  const [new_avatar, setAvatar] = useState(profileData.new_avatar);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -76,7 +83,7 @@ function ProfileSettings({ profileData, updateProfile }) {
 
     try {
       const token = localStorage.getItem("token");
-      const payload = { username }; 
+      const payload = { gender, purpose, self_assessment_lvl, preferred_communication, hours_per_week, new_avatar }; 
 
       const response = await fetch("http://87.242.103.34:5000/user/updatecreds", {
         method: "PATCH",
@@ -114,6 +121,69 @@ function ProfileSettings({ profileData, updateProfile }) {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+          />
+        </label>
+        <label className="profile-settings__label">
+          Email:
+          <input
+            className="profile-settings__input"
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </label>
+        <label className="profile-settings__label">
+          Gender:
+          <input
+            className="profile-settings__input"
+            type="text"
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+          />
+        </label>
+        <label className="profile-settings__label">
+          Purpose:
+          <input
+            className="profile-settings__input"
+            type="text"
+            value={purpose}
+            onChange={(e) => setPurpose(e.target.value)}
+          />
+        </label>
+        <label className="profile-settings__label">
+          Self assesment level:
+          <input
+            className="profile-settings__input"
+            type="text"
+            value={self_assessment_lvl}
+            onChange={(e) => setSelfAssesmentLevel(e.target.value)}
+          />
+        </label>
+        <label className="profile-settings__label">
+          preferred_communication:
+          <input
+            className="profile-settings__input"
+            type="text"
+            value={preferred_communication}
+            onChange={(e) => setPreferredCommunication(e.target.value)}
+          />
+        </label>
+        <label className="profile-settings__label">
+          hours_per_week:
+          <input
+            className="profile-settings__input"
+            type="text"
+            value={hours_per_week}
+            onChange={(e) => setHours(e.target.value)}
+          />
+        </label>
+        <label className="profile-settings__label">
+          new_avatar:
+          <input
+            className="profile-settings__input"
+            type="text"
+            value={new_avatar}
+            onChange={(e) => setAvatar(e.target.value)}
           />
         </label>
         <button
