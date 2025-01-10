@@ -462,6 +462,8 @@ import Survey from "./Survey";
 import Finder from "./Finder";
 import Login from "./Login";
 import Register from "./Register";
+import Communities from "./Communities";
+import CommunityDetails from "./CommumityDetails";
 
 function App() {
   const [profileData, setProfileData] = useState(null);
@@ -562,6 +564,8 @@ function App() {
             />
             <Route path="/survey" element={<Survey />} />
             <Route path="/finder" element={<Finder />} />
+            <Route path="/communities" element={<Communities />} />
+            <Route path="/community/:id" element={<CommunityDetails />} />
             <Route path="*" element={<Navigate to="/home" />} />
           </>
         )}

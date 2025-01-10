@@ -61,3 +61,77 @@
     background-color: #45a049;
   }
   
+
+
+
+  .profile-settings__gender-options {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
+  }
+  
+  .profile-settings__gender-options label {
+    font-size: 14px;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .profile-settings__date-picker {
+    background-color: #222;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: inherit;
+  }
+  
+  .profile-settings__date-picker::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Для стилизации иконки календаря под темный фон */
+    cursor: pointer;
+  }
+  
+  .profile-settings__gender-options input[type="radio"] {
+    accent-color: #4caf50; /* Цвет выбора радио-кнопки */
+    cursor: pointer;
+  }
+
+  
+  .profile-settings__select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #333;
+    background-color: #222;
+    color: #fff;
+    margin-top: 5px;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  
+  /*.profile-settings__select:focus {
+    border-color: #4caf50;
+    outline: none;
+  }*/
+  
+  .profile-settings__select option {
+    background-color: #222;
+    color: #fff;
+  }
+
+  .profile-settings__contacts {
+    margin-left: 20px; /* Отступ слева */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Расстояние между полями */
+  }
+
+ .profile-settings_name {
+  color: white;
+  margin: 0;
+  margin-bottom: 5px;
+ }
+  
+ .profile-settings_name:nth-child(5) {
+  margin-bottom: 0;
+ }

@@ -1,0 +1,71 @@
+.profile__details {
+    padding: 10px 20px;
+    background: #2a2a2a;
+    border-radius: 10px;
+    color: #ccc; /* Цвет текста */
+    width: 100%; /* На всю ширину блока */
+  }
+  
+  .profile__details-heading {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+  
+  .profile__details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Два равных столбца */
+    gap: 5px; /* Отступы между элементами */
+  }
+  
+  
+  .profile__detail {
+    font-size: 16px;
+    margin: 5px 0;
+    line-height: 1.5;
+  }
+  
+  .profile__detail strong {
+    color: rgb(89, 120, 199); /* Новый акцентный цвет */
+  }
+  
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal__content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  
+  .modal__close {
+    background-color: #f00;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  

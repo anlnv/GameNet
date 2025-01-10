@@ -20,14 +20,15 @@
   }
 
   .posts-form button {
-    background: #3b82f6;
+    background-color: rgba(89, 120, 199, 1);
     color: #fff;
     padding: 10px 20px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
+    transition: opacity 0.3s ease;
   }
 
   .posts-form button:hover {
-    background: #2563eb;
+    opacity: 0.8;
   }
