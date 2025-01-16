@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../images/logo.svg';
 import { useState } from 'react';
-import './logout.css'
+import './logout.css';
 
 function Header(props) {
   const [showSettings, setShowSettings] = useState(false);
@@ -19,16 +19,9 @@ function Header(props) {
     }, 2000);
   };
 
-  /*const handleLogout = () => {
-    localStorage.removeItem('token'); // Удаляем токен из локального хранилища
-    navigate('/login'); // Перенаправляем на страницу входа
+  const handleSearchClick = () => {
+    navigate('/users'); // Перенаправляем на страницу поиска пользователей
   };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token"); 
-    setIsLoggedIn(false);
-    navigate("/login"); 
-  };*/
 
   return (
     <header className="header">
@@ -41,7 +34,7 @@ function Header(props) {
         <Link to="/finder" className="header__link">Finder</Link>
       </div>
       <nav className="navbar">
-        <button className="navbar__icon navbar__icon_search"></button>
+        <button className="navbar__icon navbar__icon_search" onClick={handleSearchClick}></button>
         <button className="navbar__icon navbar__icon_notifications"></button>
         <div
           className="navbar__icon navbar__icon_settings"

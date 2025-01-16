@@ -11,6 +11,7 @@
     line-height: 21px;
     text-align: center;
     padding: 0;
+    cursor: pointer;
 }
 
 .profile__button:nth-child(2) {

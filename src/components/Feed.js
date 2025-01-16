@@ -119,7 +119,6 @@ const Feed = () => {
 
 export default Feed;*/
 
-
 import React, { useState, useEffect } from "react";
 
 const Feed = () => {
@@ -142,10 +141,7 @@ const Feed = () => {
 
         const data = await response.json();
 
-        const combinedPosts = [
-          ...data.user_posts,
-          ...data.group_posts,
-        ].map((post) => ({
+        const combinedPosts = data.posts.map((post) => ({
           id: post.id,
           text: post.content || post.title,
           image:
@@ -159,9 +155,10 @@ const Feed = () => {
             hour: "2-digit",
             minute: "2-digit",
           }),
-          author: post.community?.name || post.author.username,
+          author: post.author.username, // Исправлено на username
         }));
 
+        // Сортируем посты по дате
         combinedPosts.sort(
           (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
         );
@@ -185,7 +182,8 @@ const Feed = () => {
         {posts.map((post) => (
           <div key={post.id} className="posts__item">
             <p>
-              <strong>{post.author}</strong><p>{post.text}</p>
+              <strong>{post.author}</strong>
+              <p>{post.text}</p>
             </p>
             {post.image && <img src={post.image} alt="Post" />}
             <span className="post-date">{post.date}</span>
@@ -197,3 +195,4 @@ const Feed = () => {
 };
 
 export default Feed;
+

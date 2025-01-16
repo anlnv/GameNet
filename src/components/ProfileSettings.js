@@ -188,14 +188,19 @@ function ProfileSettings({ profileData, updateProfile }) {
   const [username, setUsername] = useState(profileData.username);
   const [email, setEmail] = useState(profileData.email);
   const [gender, setGender] = useState(profileData.gender || "male");
-  const [date_of_birth, setDate] = useState(profileData.date_of_birth || "");
+  const [purpose, setPurpose] = useState(profileData.purpose || "");
+  const [selfAssessment, setSelfAssessment] = useState(profileData.self_assessment_lvl || "");
+  const [preferredCommunication, setPreferredCommunication] = useState(profileData.preferred_communication || "");
+  const [hoursPerWeek, setHoursPerWeek] = useState(profileData.hours_per_week || 0);
+  
   const [contacts, setContacts] = useState(profileData.contacts || {
     vk: "",
     telegram: "",
     steam: "",
     discord: "",
   });
-  const [new_avatar, setAvatar] = useState(profileData.new_avatar || "");
+
+  const [newAvatar, setNewAvatar] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -204,7 +209,7 @@ function ProfileSettings({ profileData, updateProfile }) {
     setContacts({ ...contacts, [platform]: e.target.value });
   };
 
-  const handleSave = async (e) => {
+  const handleSaveBasicInfo = async (e) => {
     e.preventDefault();
 
     if (isSubmitting) return;
@@ -215,9 +220,9 @@ function ProfileSettings({ profileData, updateProfile }) {
 
     try {
       const token = localStorage.getItem("token");
-      const payload = { gender, date_of_birth, contacts, new_avatar };
+      const payload = { gender, purpose, selfAssessment, preferredCommunication, hoursPerWeek };
 
-      const response = await fetch("http://87.242.103.34:5000/user/updatecreds", {
+      const response = await fetch("http://87.242.103.34:5000/user/update-me", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -228,11 +233,83 @@ function ProfileSettings({ profileData, updateProfile }) {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update profile");
+        throw new Error(errorData.message || "Failed to update basic info");
       }
 
       await updateProfile(payload);
-      setSuccessMessage("Profile updated successfully!");
+      setSuccessMessage("Basic info updated successfully!");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSaveAvatar = async (e) => {
+    e.preventDefault();
+
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setError("");
+    setSuccessMessage("");
+
+    try {
+      const token = localStorage.getItem("token");
+      const payload = { new_avatar: newAvatar };
+
+      const response = await fetch("http://87.242.103.34:5000/user/update-me-avatar", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update avatar");
+      }
+
+      await updateProfile({ new_avatar: newAvatar });
+      setSuccessMessage("Avatar updated successfully!");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSaveContacts = async (e) => {
+    e.preventDefault();
+
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setError("");
+    setSuccessMessage("");
+
+    try {
+      const token = localStorage.getItem("token");
+      const payload = { ...contacts };
+
+      const response = await fetch("http://87.242.103.34:5000/user/update-me-contacts", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update contacts");
+      }
+
+      await updateProfile({ contacts });
+      setSuccessMessage("Contacts updated successfully!");
     } catch (error) {
       setError(error.message);
     } finally {
@@ -246,8 +323,9 @@ function ProfileSettings({ profileData, updateProfile }) {
       {error && <p className="error-message">{error}</p>}
       {successMessage && <p className="success-message">{successMessage}</p>}
       <div className="profile-settings__form">
+        {/* Basic Info */}
         <label className="profile-settings__label">
-        <p className="profile-settings_name">Username:</p>
+          <p className="profile-settings_name">Username:</p>
           <input
             className="profile-settings__input"
             type="text"
@@ -256,7 +334,7 @@ function ProfileSettings({ profileData, updateProfile }) {
           />
         </label>
         <label className="profile-settings__label">
-        <p className="profile-settings_name">Email:</p>
+          <p className="profile-settings_name">Email:</p>
           <input
             className="profile-settings__input"
             type="text"
@@ -264,8 +342,12 @@ function ProfileSettings({ profileData, updateProfile }) {
             onChange={(e) => setEmail(e.target.value)}
           />
         </label>
+
+        {/* Save Basic Info Button */}
+        
+        {/* Gender, Purpose, Self Assessment, etc. */}
         <label className="profile-settings__label">
-        <p className="profile-settings_name">Gender:</p>
+          <p className="profile-settings_name">Gender:</p>
           <select
             className="profile-settings__select"
             value={gender}
@@ -276,14 +358,33 @@ function ProfileSettings({ profileData, updateProfile }) {
           </select>
         </label>
         <label className="profile-settings__label">
-        <p className="profile-settings_name">Date of Birth:</p>
+          <p className="profile-settings_name">Purpose:</p>
           <input
-            className="profile-settings__input profile-settings__date-picker"
-            type="date"
-            value={date_of_birth}
-            onChange={(e) => setDate(e.target.value)}
+            className="profile-settings__input"
+            type="text"
+            value={purpose}
+            onChange={(e) => setPurpose(e.target.value)}
           />
         </label>
+        <label className="profile-settings__label">
+          <p className="profile-settings_name">Self Assessment Level:</p>
+          <input
+            className="profile-settings__input"
+            type="text"
+            value={selfAssessment}
+            onChange={(e) => setSelfAssessment(e.target.value)}
+          />
+        </label>
+        <button
+          className="profile-settings__save-button"
+          onClick={handleSaveBasicInfo}
+          disabled={isSubmitting}
+        >
+          Save Basic Info
+        </button>
+
+
+        {/* Contacts */}
         <p className="profile-settings_name">Contacts:</p>
         <div className="profile-settings__contacts">
           <label className="profile-settings__label">
@@ -323,21 +424,33 @@ function ProfileSettings({ profileData, updateProfile }) {
             />
           </label>
         </div>
+        {/* Save Contacts Button */}
+        <button
+          className="profile-settings__save-button"
+          onClick={handleSaveContacts}
+          disabled={isSubmitting}
+        >
+          Save Contacts
+        </button>
+
+        
+        {/* Avatar */}
         <label className="profile-settings__label">
-        <p className="profile-settings_name">Avatar:</p>
+          <p className="profile-settings_name">New Avatar:</p>
           <input
             className="profile-settings__input"
             type="text"
-            value={new_avatar}
-            onChange={(e) => setAvatar(e.target.value)}
+            value={newAvatar}
+            onChange={(e) => setNewAvatar(e.target.value)}
           />
         </label>
+        {/* Save Avatar Button */}
         <button
           className="profile-settings__save-button"
-          onClick={handleSave}
+          onClick={handleSaveAvatar}
           disabled={isSubmitting}
         >
-          Save Changes
+          Save Avatar
         </button>
       </div>
     </div>

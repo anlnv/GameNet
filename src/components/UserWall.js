@@ -140,70 +140,47 @@ export default UserWall;*/
 
 import React, { useState, useEffect } from "react";
 
-const UserWall = () => {
-  const [posts, setPosts] = useState([]);
+const UserWall = ({ profileData }) => {
+  const [userPosts, setUserPosts] = useState([]);
   const [newPostText, setNewPostText] = useState("");
-  const [newPostImage, setNewPostImage] = useState(null);
+  const [newPostImage, setNewPostImage] = useState(null); // Файл
+  const [previewImage, setPreviewImage] = useState(null); // Превью
+
+  const fetchUserPosts = async () => {
+    if (profileData && profileData.id) {
+      try {
+        const response = await fetch(
+          `http://87.242.103.34:5000/posts/${profileData.id}/get-posts`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch posts");
+        }
+        const result = await response.json();
+        setUserPosts(Array.isArray(result.posts) ? result.posts : []);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        setUserPosts([]);
+      }
+    }
+  };
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        // Получаем токен и ID пользователя из локального хранилища
-        const token = localStorage.getItem("token");
-        const userId = localStorage.getItem("userId"); // ID пользователя, который должен быть в localStorage
-
-        // Проверяем, что оба значения есть
-        if (!token || !userId) {
-          console.error("Token or User ID is missing");
-          return;
-        }
-
-        // Отправляем запрос на сервер для получения постов
-        const response = await fetch("http://87.242.103.34:5000/posts/load_users", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ user_id: userId }),
-        });
-
-        // Обрабатываем ответ
-        const result = await response.json();
-        if (response.ok) {
-          setPosts(result.posts); // Сохраняем посты в состоянии
-        } else {
-          console.error("Error fetching posts:", result);
-        }
-      } catch (error) {
-        console.error("Error during fetching posts:", error);
-      }
-    };
-
-    fetchPosts();
-  }, []); // Запрос выполняется один раз при монтировании компонента
+    fetchUserPosts();
+  }, [profileData]);
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
 
     if (newPostText.trim() || newPostImage) {
       try {
-        // Создаём новый объект FormData
         const formData = new FormData();
-
-        // Добавляем обязательные поля: title и content
-        formData.append("title", "1"); // "1" как обязательное поле
+        formData.append("title", "1");
         formData.append("content", newPostText.trim());
-
-        // Если изображение было загружено, добавляем его
         if (newPostImage) {
-          formData.append("attachments", newPostImage);
+          formData.append("attachments", newPostImage); // Загружаемый файл
         }
 
-        // Получаем токен из локального хранилища
         const token = localStorage.getItem("token");
-
-        // Отправляем запрос на сервер
         const response = await fetch("http://87.242.103.34:5000/posts/create", {
           method: "POST",
           headers: {
@@ -212,29 +189,13 @@ const UserWall = () => {
           body: formData,
         });
 
-        // Обрабатываем ответ
-        const result = await response.json();
-        console.log("Post result:", result);
-
         if (response.ok) {
-          // Обновляем состояние постов, если запрос успешен
-          const newPost = {
-            id: Date.now(),
-            text: newPostText.trim(),
-            image: newPostImage,
-            date: new Date().toLocaleString("en-US", { 
-              year: "numeric", 
-              month: "long", 
-              day: "numeric", 
-              hour: "2-digit", 
-              minute: "2-digit" 
-            }),
-          };
-
-          setPosts([newPost, ...posts]);
+          await fetchUserPosts();
           setNewPostText("");
           setNewPostImage(null);
+          setPreviewImage(null); // Сбрасываем превью
         } else {
+          const result = await response.json();
           console.error("Error posting:", result);
         }
       } catch (error) {
@@ -246,9 +207,10 @@ const UserWall = () => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setNewPostImage(file); // Сохраняем файл
       const reader = new FileReader();
       reader.onloadend = () => {
-        setNewPostImage(reader.result);
+        setPreviewImage(reader.result); // Создаём превью (base64)
       };
       reader.readAsDataURL(file);
     }
@@ -279,25 +241,37 @@ const UserWall = () => {
           <button type="submit">Post</button>
         </div>
 
-        {newPostImage && (
+        {previewImage && (
           <div className="image-preview">
-            <img src={newPostImage} alt="Preview" />
-            <button className="remove-button" onClick={() => setNewPostImage(null)}>Remove</button>
+            <img src={previewImage} alt="Preview" />
+            <button
+              className="remove-button"
+              onClick={() => {
+                setNewPostImage(null);
+                setPreviewImage(null);
+              }}
+            >
+              Remove
+            </button>
           </div>
         )}
       </form>
 
       <div className="posts">
-        {posts.map((post) => (
-          <div key={post.id} className="posts__item">
-            <h3>{post.title}</h3>
-            <p>{post.content}</p>
-            {post.media_files && post.media_files.length > 0 && (
-              <img src={post.media_files[0].file_url} alt="Post" />
-            )}
-            <span className="post-date">{new Date(post.created_at).toLocaleString()}</span>
-          </div>
-        ))}
+        {userPosts
+          .slice() // Создаём копию массива
+          .reverse() // Отображаем в обратном порядке
+          .map((post) => (
+            <div key={post.id} className="posts__item">
+              <p>{post.content}</p>
+              {post.media_files && post.media_files.length > 0 && (
+                <img src={post.media_files[0].file_url} alt="Post" />
+              )}
+              <span className="post-date">
+                {new Date(post.created_at).toLocaleString()}
+              </span>
+            </div>
+          ))}
       </div>
     </div>
   );

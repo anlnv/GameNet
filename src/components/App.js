@@ -464,6 +464,8 @@ import Login from "./Login";
 import Register from "./Register";
 import Communities from "./Communities";
 import CommunityDetails from "./CommumityDetails";
+import User from "./User";
+import Users from "./Users";
 
 function App() {
   const [profileData, setProfileData] = useState(null);
@@ -477,6 +479,7 @@ function App() {
   // Функция проверки токена при загрузке приложения
   const checkAuth = async () => {
     const token = localStorage.getItem("token");
+    
     if (token) {
       try {
         const response = await fetch("http://87.242.103.34:5000/user/me", {
@@ -500,6 +503,7 @@ function App() {
     }
     setIsAuthChecked(true);
     setLoading(false);
+    console.log(token);
   };
 
   // Выполняем проверку токена при загрузке приложения
@@ -548,7 +552,7 @@ function App() {
               element={
                 <div>
                   <Profile profileData={profileData} />
-                  <UserWall />
+                  <UserWall profileData={profileData} />
                 </div>
               }
             />
@@ -565,7 +569,9 @@ function App() {
             <Route path="/survey" element={<Survey />} />
             <Route path="/finder" element={<Finder />} />
             <Route path="/communities" element={<Communities />} />
+            <Route path="/users" element={<Users />} />
             <Route path="/community/:id" element={<CommunityDetails />} />
+            <Route path="/user/:userId" element={<User currentUser={profileData}/>} />
             <Route path="*" element={<Navigate to="/home" />} />
           </>
         )}

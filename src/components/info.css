@@ -30,42 +30,62 @@
     color: rgb(89, 120, 199); /* Новый акцентный цвет */
   }
   
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal__content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    max-height: 400px;
-    overflow-y: auto;
-  }
-  
-  .modal__close {
-    background-color: #f00;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd;
-  }
-  
+ 
+
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal__close {
+  position: absolute; /* Позиционируем кнопку относительно модального окна */
+  top: 10px; /* Расстояние от верхнего края */
+  right: 1px; /* Расстояние от правого края */
+  width: 40px; /* Увеличиваем размер кнопки */
+  height: 40px; /* Увеличиваем размер кнопки */
+  background-color: transparent; /* Прозрачный фон для кнопки */
+  border: none; /* Убираем рамку */
+  cursor: pointer; /* Указатель мыши */
+  justify-content: center; /* Центрирование содержимого по горизонтали */
+  align-items: center; /* Центрирование содержимого по вертикали */
+}
+
+.modal__close img {
+  width: 80%; /* Устанавливаем изображение чуть меньше размера кнопки */
+  height: 80%; /* Устанавливаем изображение чуть меньше размера кнопки */
+  display: block; /* Убираем дополнительные отступы */
+}
+
+.modal__close:hover img {
+  filter: brightness(0.8); /* Затемнение изображения при наведении */
+  transform: scale(1.1); /* Легкое увеличение при наведении */
+}
+
+.modal__content {
+  background-color: #2a2a2a; /* Цвет фона модального окна */
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  position: relative; /* Для правильного позиционирования кнопки */
+}
+
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
