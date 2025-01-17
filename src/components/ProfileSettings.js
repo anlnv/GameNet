@@ -186,20 +186,18 @@ import "./ps.css";
 
 function ProfileSettings({ profileData, updateProfile }) {
   const [username, setUsername] = useState(profileData.username);
-  const [email, setEmail] = useState(profileData.email);
+  const [dateOfBirth, setDateOfBirth] = useState(profileData.date_of_birth);
   const [gender, setGender] = useState(profileData.gender || "male");
   const [purpose, setPurpose] = useState(profileData.purpose || "");
   const [selfAssessment, setSelfAssessment] = useState(profileData.self_assessment_lvl || "");
   const [preferredCommunication, setPreferredCommunication] = useState(profileData.preferred_communication || "");
   const [hoursPerWeek, setHoursPerWeek] = useState(profileData.hours_per_week || 0);
-  
   const [contacts, setContacts] = useState(profileData.contacts || {
     vk: "",
     telegram: "",
     steam: "",
     discord: "",
   });
-
   const [newAvatar, setNewAvatar] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -207,6 +205,89 @@ function ProfileSettings({ profileData, updateProfile }) {
 
   const handleContactsChange = (e, platform) => {
     setContacts({ ...contacts, [platform]: e.target.value });
+  };
+
+  const handleSaveCredits = async (e) => {
+    e.preventDefault();
+
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setError("");
+    setSuccessMessage("");
+
+    try {
+      const token = localStorage.getItem("token");
+      const payload = {
+        new_username: username !== profileData.username ? username : null,
+        new_password: null,
+        new_dob: dateOfBirth !== profileData.date_of_birth ? dateOfBirth : null,
+      };
+
+      const response = await fetch("http://87.242.103.34:5000/user/change-credits", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update credits");
+      }
+
+      await updateProfile(payload);
+      setSuccessMessage("Credits updated successfully!");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSaveContacts = async (e) => {
+    e.preventDefault();
+
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setError("");
+    setSuccessMessage("");
+
+    try {
+      const token = localStorage.getItem("token");
+      const updatedContacts = Object.fromEntries(
+        Object.entries(contacts).map(([key, value]) => [
+          key,
+          value !== profileData.contacts?.[key] ? value : null,
+        ])
+      );
+
+      const payload = { ...updatedContacts };
+
+      const response = await fetch("http://87.242.103.34:5000/user/update-me-contacts", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update contacts");
+      }
+
+      await updateProfile({ contacts });
+      setSuccessMessage("Contacts updated successfully!");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleSaveBasicInfo = async (e) => {
@@ -220,7 +301,12 @@ function ProfileSettings({ profileData, updateProfile }) {
 
     try {
       const token = localStorage.getItem("token");
-      const payload = { gender, purpose, selfAssessment, preferredCommunication, hoursPerWeek };
+      const payload = {
+        purpose: purpose !== profileData.purpose ? purpose : null,
+        self_assessment_lvl: selfAssessment !== profileData.self_assessment_lvl ? selfAssessment : null,
+        preferred_communication: preferredCommunication !== profileData.preferred_communication ? preferredCommunication : null,
+        hours_per_week: hoursPerWeek !== profileData.hours_per_week ? hoursPerWeek : null,
+      };
 
       const response = await fetch("http://87.242.103.34:5000/user/update-me", {
         method: "PATCH",
@@ -256,15 +342,15 @@ function ProfileSettings({ profileData, updateProfile }) {
 
     try {
       const token = localStorage.getItem("token");
-      const payload = { new_avatar: newAvatar };
+      const formData = new FormData();
+      formData.append("new_avatar", newAvatar);
 
       const response = await fetch("http://87.242.103.34:5000/user/update-me-avatar", {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -281,51 +367,15 @@ function ProfileSettings({ profileData, updateProfile }) {
     }
   };
 
-  const handleSaveContacts = async (e) => {
-    e.preventDefault();
-
-    if (isSubmitting) return;
-
-    setIsSubmitting(true);
-    setError("");
-    setSuccessMessage("");
-
-    try {
-      const token = localStorage.getItem("token");
-      const payload = { ...contacts };
-
-      const response = await fetch("http://87.242.103.34:5000/user/update-me-contacts", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update contacts");
-      }
-
-      await updateProfile({ contacts });
-      setSuccessMessage("Contacts updated successfully!");
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <div className="profile-settings">
       <h2>Profile Settings</h2>
       {error && <p className="error-message">{error}</p>}
       {successMessage && <p className="success-message">{successMessage}</p>}
-      <div className="profile-settings__form">
-        {/* Basic Info */}
+
+      <form className="profile-settings__form" onSubmit={handleSaveCredits}>
         <label className="profile-settings__label">
-          <p className="profile-settings_name">Username:</p>
+          Username:
           <input
             className="profile-settings__input"
             type="text"
@@ -334,31 +384,33 @@ function ProfileSettings({ profileData, updateProfile }) {
           />
         </label>
         <label className="profile-settings__label">
-          <p className="profile-settings_name">Email:</p>
+          Date of Birth:
           <input
             className="profile-settings__input"
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="date"
+            value={dateOfBirth}
+            onChange={(e) => setDateOfBirth(e.target.value)}
           />
         </label>
+        <button className="profile-settings__save-button" type="submit" disabled={isSubmitting}>
+          Save Credits
+        </button>
+      </form>
 
-        {/* Save Basic Info Button */}
-        
-        {/* Gender, Purpose, Self Assessment, etc. */}
+      <form className="profile-settings__form" onSubmit={handleSaveBasicInfo}>
         <label className="profile-settings__label">
-          <p className="profile-settings_name">Gender:</p>
+          Gender:
           <select
             className="profile-settings__select"
             value={gender}
             onChange={(e) => setGender(e.target.value)}
           >
-            <option value="male">male</option>
-            <option value="female">female</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
           </select>
         </label>
         <label className="profile-settings__label">
-          <p className="profile-settings_name">Purpose:</p>
+          Purpose:
           <input
             className="profile-settings__input"
             type="text"
@@ -367,7 +419,7 @@ function ProfileSettings({ profileData, updateProfile }) {
           />
         </label>
         <label className="profile-settings__label">
-          <p className="profile-settings_name">Self Assessment Level:</p>
+          Self-Assessment Level:
           <input
             className="profile-settings__input"
             type="text"
@@ -375,84 +427,81 @@ function ProfileSettings({ profileData, updateProfile }) {
             onChange={(e) => setSelfAssessment(e.target.value)}
           />
         </label>
-        <button
-          className="profile-settings__save-button"
-          onClick={handleSaveBasicInfo}
-          disabled={isSubmitting}
-        >
-          Save Basic Info
-        </button>
-
-
-        {/* Contacts */}
-        <p className="profile-settings_name">Contacts:</p>
-        <div className="profile-settings__contacts">
-          <label className="profile-settings__label">
-            VK:
-            <input
-              className="profile-settings__input profile-settings__input_contacts"
-              type="url"
-              value={contacts.vk}
-              onChange={(e) => handleContactsChange(e, "vk")}
-            />
-          </label>
-          <label className="profile-settings__label">
-            Telegram:
-            <input
-              className="profile-settings__input"
-              type="url"
-              value={contacts.telegram}
-              onChange={(e) => handleContactsChange(e, "telegram")}
-            />
-          </label>
-          <label className="profile-settings__label">
-            Steam:
-            <input
-              className="profile-settings__input"
-              type="url"
-              value={contacts.steam}
-              onChange={(e) => handleContactsChange(e, "steam")}
-            />
-          </label>
-          <label className="profile-settings__label">
-            Discord:
-            <input
-              className="profile-settings__input"
-              type="url"
-              value={contacts.discord}
-              onChange={(e) => handleContactsChange(e, "discord")}
-            />
-          </label>
-        </div>
-        {/* Save Contacts Button */}
-        <button
-          className="profile-settings__save-button"
-          onClick={handleSaveContacts}
-          disabled={isSubmitting}
-        >
-          Save Contacts
-        </button>
-
-        
-        {/* Avatar */}
         <label className="profile-settings__label">
-          <p className="profile-settings_name">New Avatar:</p>
+          Preferred Communication:
           <input
             className="profile-settings__input"
             type="text"
-            value={newAvatar}
-            onChange={(e) => setNewAvatar(e.target.value)}
+            value={preferredCommunication}
+            onChange={(e) => setPreferredCommunication(e.target.value)}
           />
         </label>
-        {/* Save Avatar Button */}
-        <button
-          className="profile-settings__save-button"
-          onClick={handleSaveAvatar}
-          disabled={isSubmitting}
-        >
+        <label className="profile-settings__label">
+          Hours Per Week:
+          <input
+            className="profile-settings__input"
+            type="number"
+            value={hoursPerWeek}
+            onChange={(e) => setHoursPerWeek(e.target.value)}
+          />
+        </label>
+        <button className="profile-settings__save-button" type="submit" disabled={isSubmitting}>
+          Save Basic Info
+        </button>
+      </form>
+
+      <form className="profile-settings__form" onSubmit={handleSaveContacts}>
+        <h3>Contacts</h3>
+        <label className="profile-settings__label">
+          VK:
+          <input
+            className="profile-settings__input"
+            value={contacts.vk}
+            onChange={(e) => handleContactsChange(e, "vk")}
+          />
+        </label>
+        <label className="profile-settings__label">
+          Telegram:
+          <input
+            className="profile-settings__input"
+            value={contacts.telegram}
+            onChange={(e) => handleContactsChange(e, "telegram")}
+          />
+        </label>
+        <label className="profile-settings__label">
+          Steam:
+          <input
+            className="profile-settings__input"
+            value={contacts.steam}
+            onChange={(e) => handleContactsChange(e, "steam")}
+          />
+        </label>
+        <label className="profile-settings__label">
+          Discord:
+          <input
+            className="profile-settings__input"
+            value={contacts.discord}
+            onChange={(e) => handleContactsChange(e, "discord")}
+          />
+        </label>
+        <button className="profile-settings__save-button" type="submit" disabled={isSubmitting}>
+          Save Contacts
+        </button>
+      </form>
+
+      <form className="profile-settings__form" onSubmit={handleSaveAvatar}>
+        <label className="profile-settings__label">
+          New Avatar:
+          <input
+            className="profile-settings__input"
+            type="file"
+            onChange={(e) => setNewAvatar(e.target.files[0])}
+          />
+        </label>
+        <button className="profile-settings__save-button" type="submit" disabled={isSubmitting}>
           Save Avatar
         </button>
-      </div>
+      </form>
     </div>
   );
 }

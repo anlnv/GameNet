@@ -1,112 +1,212 @@
 .community-details {
-    color: #fff;
-    background-color: rgb(45, 50, 65);
-    padding: 20px;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .community-details__title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .community-details__description {
-    font-size: 16px;
-    margin-bottom: 20px;
-  }
-  
-  .community-details__members-button {
-    background-color: rgb(89, 120, 199);
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .community-details__members-button:hover {
-    background-color: rgb(75, 100, 175);
-  }
-  
-  .community-details__posts {
-    margin-top: 20px;
-  }
-  
-  .community-details__section-title {
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .community-details__post {
-    background-color: rgb(55, 60, 75);
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-  
-  .community-details__post-title {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .community-details__no-posts {
-    color: #ccc;
-  }
-  
-  /* Popup styles */
-  .popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .popup {
-    background: rgb(45, 50, 65);
-    padding: 20px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 400px;
-    color: #fff;
-  }
-  
-  .popup__close {
-    background: transparent;
-    color: #fff;
-    border: none;
-    font-size: 20px;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-  }
-  
-  .popup__title {
-    font-size: 18px;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-  
-  .popup__members-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .popup__member-item {
-    font-size: 16px;
-    padding: 5px 0;
-    border-bottom: 1px solid rgb(55, 60, 75);
-  }
-  
+  color: #fff;
+  background-color: rgb(45, 50, 65);
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.community-details__title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.community-details__description {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.community-details__members-button {
+  background-color: rgb(89, 120, 199);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.community-details__members-button:hover {
+  background-color: rgb(75, 100, 175);
+}
+
+.community-details__posts {
+  margin-top: 20px;
+}
+
+.community-details__section-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.community-details__post {
+  background-color: rgb(55, 60, 75);
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.community-details__post-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.community-details__no-posts {
+  color: #ccc;
+}
+
+/* Popup styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup {
+  background: rgb(45, 50, 65);
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  color: #fff;
+}
+
+.popup__close {
+  background: transparent;
+  color: #fff;
+  border: none;
+  font-size: 20px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.popup__title {
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.popup__members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.popup__member-card {
+  background-color: rgb(55, 60, 75);
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  color: #fff;
+}
+
+.popup__member-name {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Form Styles */
+.community-details__post-form {
+  margin-top: 20px;
+}
+
+.community-details__post-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: rgb(55, 60, 75);
+  border: 1px solid rgb(65, 70, 85);
+  color: #fff;
+  resize: none;
+}
+
+.community-details__post-attachment {
+  margin-top: 10px;
+  color: #fff;
+}
+
+.community-details__post-submit {
+  background-color: rgb(89, 120, 199);
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.community-details__post-submit:hover {
+  background-color: rgb(75, 100, 175);
+}
+
+.community-details__post-media {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.community-details__post-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.community-details__members-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.community-details__members-popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 400px;
+}
+
+.community-details__members-popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+}
+
+.community-details__members-list {
+  margin-top: 20px;
+}
+
+.community-details__member {
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.community-details__members-btn {
+  margin-top: 20px;
+}

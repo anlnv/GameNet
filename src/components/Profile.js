@@ -369,17 +369,17 @@ useEffect(() => {
       <div className="profile__details">
         <div className="profile__details-grid">
           <p className="profile__detail">
-            <strong>Gender:</strong> {profileData.gender || "Not specified"}
+            <strong>Self assesmemt level:</strong> {profileData.info.self_assessment_lvl || "Not specified"}
           </p>
           <p className="profile__detail">
-            <strong>Purpose:</strong> {profileData.purpose || "Not specified"}
+            <strong>Purpose:</strong> {profileData.info.purpose || "Not specified"}
           </p>
           <p className="profile__detail">
             <strong>Preferred Communication:</strong>{" "}
-            {profileData.preferred_communication || "Not specified"}
+            {profileData.info.preferred_communication || "Not specified"}
           </p>
           <p className="profile__detail">
-            <strong>Hours Per Week:</strong> {profileData.hours_per_week || "0"}
+            <strong>Hours Per Week:</strong> {profileData.info.hours_per_week || "0"}
           </p>
         </div>
       </div>
