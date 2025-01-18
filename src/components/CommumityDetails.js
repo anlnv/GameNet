@@ -76,12 +76,12 @@ function CommunityDetails({ profileData }) {
     }
   };
 
-  const handleSubscription = async () => {
+  /*const handleSubscription = async () => {
     try {
       const token = localStorage.getItem("token");
       const method = isSubscribed ? "DELETE" : "POST";
       const response = await fetch(
-        `http://87.242.103.34:5000/community/${id}/subscription`,
+        `http://87.242.103.34:5000/community/${id}/join`,
         {
           method,
           headers: {
@@ -92,6 +92,31 @@ function CommunityDetails({ profileData }) {
 
       if (!response.ok) {
         throw new Error("Failed to update subscription status");
+      }
+
+      setIsSubscribed(!isSubscribed);
+    } catch (error) {
+      setError(error.message);
+    }
+  };*/
+
+  const handleSubscription = async () => {
+    const url = `http://87.242.103.34:5000/community/${id}/${isSubscribed ? "leave" : "join"}`;
+    const method = isSubscribed ? "DELETE" : "POST";
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(url, {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ community_id: id }),
+      });
+
+      if (!response.ok) {
+        throw new Error(isSubscribed ? "Failed to unsubscribe" : "Failed to subscribe");
       }
 
       setIsSubscribed(!isSubscribed);
