@@ -55,13 +55,17 @@ export default Finder;*/
 
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Изменено на useNavigate
 import './finder.css';
 
-function Finder() {
+function Finder({ profileData }) {
+  const navigate = useNavigate(); // Используем useNavigate для навигации
   const [showRecommendations, setShowRecommendations] = useState(false);
   const [recommendedUsers, setRecommendedUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const userId = profileData.id; // Идентификатор текущего пользователя
 
   const fetchRecommendedUsers = async () => {
     try {
@@ -70,7 +74,9 @@ function Finder() {
       if (!token) {
         throw new Error("No token found. Please log in.");
       }
-      const response = await fetch("http://87.242.103.34:5000/rs/find", {
+
+      // Новый запрос с user_id в URL
+      const response = await fetch(`http://87.242.103.34:5000/rs/${userId}/find`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -82,7 +88,7 @@ function Finder() {
       }
 
       const data = await response.json();
-      setRecommendedUsers(data);
+      setRecommendedUsers(data.mates); // Данные пользователей в mates
     } catch (err) {
       setError(err.message);
     } finally {
@@ -96,7 +102,11 @@ function Finder() {
   };
 
   const handleAddFriend = (userName) => {
-    alert(`${userName} добавлен в друзья!`);
+    alert(`${userName} added as a friend!`);
+  };
+
+  const handleProfileRedirect = (userId) => {
+    navigate(`/user/${userId}`); // Перенаправление на страницу профиля
   };
 
   return (
@@ -115,14 +125,14 @@ function Finder() {
             {recommendedUsers.map((user, index) => (
               <li key={index} className="user-item">
                 <div className="user-info">
-                  <span>{user.username}</span>
+                  <span 
+                    className="username" 
+                    onClick={() => handleProfileRedirect(user.user_id)} // Обработчик клика на имя
+                  >
+                    {user.username}
+                  </span>
+                  <span className="user-score">{user.score}</span> {/* Можно показывать очки */}
                 </div>
-                <button
-                  className="add-friend-btn"
-                  onClick={() => handleAddFriend(user.username)}
-                >
-                  +
-                </button>
               </li>
             ))}
           </ul>
@@ -133,4 +143,3 @@ function Finder() {
 }
 
 export default Finder;
-

@@ -567,7 +567,7 @@ function App() {
               }
             />
             <Route path="/survey" element={<Survey />} />
-            <Route path="/finder" element={<Finder />} />
+            <Route path="/finder" element={<Finder profileData={profileData} />} />
             <Route path="/communities" element={<Communities profileData={profileData}/>} />
             <Route path="/users" element={<Users />} />
             <Route path="/community/:id" element={<CommunityDetails profileData={profileData} />} />

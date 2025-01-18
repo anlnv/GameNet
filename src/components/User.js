@@ -188,7 +188,7 @@ useEffect(() => {
         </div>
         <div className="profile__text">
           <p className="profile__text_name">{userData.username}</p>
-          <p className="profile__text_nick">Steam ID: {userData.steam_id || "Not specified"}</p>
+          <p className="profile__text_nick">Steam ID: {userData.contacts.steam || "Not specified"}</p>
         </div>
       </div>
 

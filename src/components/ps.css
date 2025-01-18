@@ -55,6 +55,7 @@
     border-radius: 5px;
     cursor: pointer;
     align-self: flex-start;
+    margin-bottom: 5px;
   }
   
   .profile-settings__save-button:hover {
@@ -134,4 +135,19 @@
   
  .profile-settings_name:nth-child(5) {
   margin-bottom: 0;
+ }
+
+ .steam {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #cf7327;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-start;
+ }
+
+ .steam:hover {
+    background-color: #c27e47;
  }

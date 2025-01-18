@@ -141,6 +141,7 @@ const Feed = () => {
 
         const data = await response.json();
 
+        // Обрабатываем посты
         const combinedPosts = data.posts.map((post) => ({
           id: post.id,
           text: post.content || post.title,
@@ -155,7 +156,8 @@ const Feed = () => {
             hour: "2-digit",
             minute: "2-digit",
           }),
-          author: post.author.username, // Исправлено на username
+          author: post.author.username,
+          community: post.community ? post.community.name : null,
         }));
 
         // Сортируем посты по дате
@@ -182,9 +184,11 @@ const Feed = () => {
         {posts.map((post) => (
           <div key={post.id} className="posts__item">
             <p>
-              <strong>{post.author}</strong>
-              <p>{post.text}</p>
+              <strong>
+                {post.community ? post.community : post.author}
+              </strong>
             </p>
+            <p>{post.text}</p>
             {post.image && <img src={post.image} alt="Post" />}
             <span className="post-date">{post.date}</span>
           </div>
@@ -195,4 +199,5 @@ const Feed = () => {
 };
 
 export default Feed;
+
 

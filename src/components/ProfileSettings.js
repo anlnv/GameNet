@@ -367,6 +367,29 @@ function ProfileSettings({ profileData, updateProfile }) {
     }
   };
 
+  // Обработчик для подключения Steam
+  const handleConnectSteam = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch("http://87.242.103.34:5000/auth/steam/login", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to connect Steam");
+      }
+
+      setSuccessMessage("Steam account connected successfully!");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   return (
     <div className="profile-settings">
       <h2>Profile Settings</h2>
@@ -502,6 +525,18 @@ function ProfileSettings({ profileData, updateProfile }) {
           Save Avatar
         </button>
       </form>
+
+      
+      <h3>Steam</h3>
+      <div className="profile-settings__integration">
+        <button
+          className="profile-settings__save-button steam"
+          onClick={handleConnectSteam}
+          disabled={isSubmitting}
+        >
+          Connect Steam
+        </button>
+        </div>
     </div>
   );
 }
