@@ -1,0 +1,90 @@
+name: CI/CD for Next.js with Turbopack
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - '**'
+
+env:
+  NODE_VERSION: 22.13.0
+  DOCKER_IMAGE: ghcr.io/andchch/gsn-frontend
+  DOCKER_TAG: latest
+
+jobs:
+  # 1. Проверка уязвимостей
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run vulnerability scan
+        run: npm audit --production --audit-level=high
+
+  # 2. Проверка качества кода (ESLint)
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+  # 3. Сборка приложения и публикация Docker-образа
+  build-and-push:
+    runs-on: ubuntu-latest
+    needs: [security-scan, code-quality]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production application with Turbopack
+        run: |
+          NEXT_PRIVATE_TURBOPACK=true npm run build
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }} \
+            -t ${{ env.DOCKER_IMAGE }}:$(git rev-parse --short HEAD) \
+            .
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}
+          docker push ${{ env.DOCKER_IMAGE }}:$(git rev-parse --short HEAD)
