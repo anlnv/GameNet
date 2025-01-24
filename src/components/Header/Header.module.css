@@ -1,0 +1,152 @@
+.header {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0;
+  border-bottom: 1px solid white;
+  display: flex;
+  align-items: center;
+  height: 65px;
+}
+
+.header__link {
+  color: #ffffff;
+  text-decoration: none;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.header__link:nth-child(n + 2) {
+  margin-left: 36px;
+}
+
+.header__link:hover {
+  opacity: 0.8;
+  color: rgb(55, 57, 68);
+}
+
+.header__links {
+  display: flex;
+  margin-left: 654px;
+  padding: 0px;
+}
+
+.header__logo {
+  /*margin: 24px 16px 24px 40px;*/
+  width: 18px;
+  height: 18px;
+  margin-left: 40px;
+}
+
+.header__name {
+  /*font-family: 'Space Grotesk';*/
+  font-style: normal;
+  font-weight: 550;
+  font-size: 18px;
+  line-height: 23px;
+  color: #ffffff;
+  padding: 0px;
+  margin-left: 16px;
+  margin-bottom: 14px;
+}
+
+.settings_popup {
+  position: absolute;
+  top: 60px;
+  right: 200px;
+  background-color: #2c2c2c; /* Цвет фона попапа */
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings_popup__item {
+  color: white;
+  text-decoration: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.settings_popup__item:hover {
+  background-color: #444;
+}
+
+.settings_popup__logout {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  padding: 8px 16px;
+  text-align: left;
+  font-size: 14px;
+  width: 100%;
+}
+
+.settings_popup__logout:hover {
+  background-color: #f5f5f5;
+}
+
+.navbar {
+  display: flex;
+  margin-left: 32px;
+}
+
+.navbar__icon {
+  width: 40px;
+  height: 40px;
+  margin: 0px;
+  border: none;
+}
+
+.navbar__icon:nth-child(3) {
+  margin-left: 32px;
+}
+.navbar__icon:nth-child(1) {
+  margin-right: 8px;
+}
+
+.navbar__icon_settings {
+  background-color: rgba(43, 46, 54, 1);
+  border-radius: 12px;
+  background-image: url('/images/icons8-settings-40.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+.navbar__icon_setting:hover {
+  opacity: 0.8;
+}
+
+.navbar__icon_search {
+  background-color: rgba(43, 46, 54, 1);
+  border-radius: 12px;
+  background-image: url('/images/button-search.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+.navbar__icon_search:hover {
+  opacity: 0.8;
+}
+
+.navbar__icon_notifications {
+  background-color: rgba(43, 46, 54, 1);
+  border-radius: 12px;
+  background-image: url('/images/button-notifications.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+.navbar__icon_notifications:hover {
+  opacity: 0.8;
+}

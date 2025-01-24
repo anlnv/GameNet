@@ -1,0 +1,235 @@
+.profile {
+  max-width: 960px;
+  margin: 20px auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.profile__actions {
+  display: flex;
+  margin: auto;
+}
+
+/*.profile__avatar {
+    height: 128px;
+    width: 128px;
+    border-radius: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;   
+}*/
+
+.profile__avatar {
+  width: 256;
+  height: 256 px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.profile__avatar_loading {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+}
+
+.profile__avatar_text {
+  color: #777;
+  font-size: 12px;
+  text-align: center;
+}
+
+.profile__button {
+  width: 234px;
+  height: 40px;
+  background-color: #2a2a2a;
+  border-radius: 12px;
+  border: none;
+  color: white;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  text-align: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.profile__button:nth-child(2) {
+  background-color: rgba(89, 120, 199, 1);
+  margin-left: 10px;
+}
+
+.profile__info {
+  display: flex;
+  margin: 16px;
+}
+
+.profile__stat {
+  width: 276px;
+  border: 1px solid rgba(64, 69, 79, 1);
+  border-radius: 8px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 30px;
+  color: #ffffff;
+  padding: 14px;
+  cursor: pointer;
+}
+
+.profile__stat_text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: #a3a6b3;
+  padding: 0;
+  margin: 0;
+  padding-top: 8px;
+}
+
+.profile__stats {
+  width: 960px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.profile__text {
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+  padding-top: 38px;
+  max-width: 200px;
+}
+
+.profile__text_name {
+  margin: 0;
+  justify-self: center;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 28px;
+  color: #ffffff;
+}
+
+.profile__text_nick {
+  margin: 0;
+  height: 24px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 24px;
+  color: #a3a6b3;
+}
+
+.profile__details {
+  padding: 10px 20px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  color: #ccc; /* Цвет текста */
+  width: 100%; /* На всю ширину блока */
+}
+
+.profile__details-heading {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.profile__details_grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Два равных столбца */
+  gap: 5px; /* Отступы между элементами */
+}
+
+.profile__detail {
+  font-size: 16px;
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+.profile__detail strong {
+  color: rgb(89, 120, 199); /* Новый акцентный цвет */
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal__close {
+  position: absolute; /* Позиционируем кнопку относительно модального окна */
+  top: 10px; /* Расстояние от верхнего края */
+  right: 1px; /* Расстояние от правого края */
+  width: 40px; /* Увеличиваем размер кнопки */
+  height: 40px; /* Увеличиваем размер кнопки */
+  background-color: transparent; /* Прозрачный фон для кнопки */
+  border: none; /* Убираем рамку */
+  cursor: pointer; /* Указатель мыши */
+  justify-content: center; /* Центрирование содержимого по горизонтали */
+  align-items: center; /* Центрирование содержимого по вертикали */
+}
+
+.modal__close img {
+  width: 80%; /* Устанавливаем изображение чуть меньше размера кнопки */
+  height: 80%; /* Устанавливаем изображение чуть меньше размера кнопки */
+  display: block; /* Убираем дополнительные отступы */
+}
+
+.modal__close:hover img {
+  filter: brightness(0.8); /* Затемнение изображения при наведении */
+  transform: scale(1.1); /* Легкое увеличение при наведении */
+}
+
+.modal__content {
+  background-color: #2a2a2a; /* Цвет фона модального окна */
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  position: relative; /* Для правильного позиционирования кнопки */
+}
+
+.profile__u_list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.profile__u_list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.profile__list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.profile__list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}

@@ -1,0 +1,149 @@
+.profile_settings {
+  max-width: 960px;
+  margin: 20px auto;
+  color: white;
+  height: 100%;
+}
+
+.profile_settings__form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.profile_settings__avatar_preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile_settings__avatar_preview img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile_settings__label_avatar input {
+  cursor: pointer;
+  /*display: none;*/
+}
+
+.profile_settings label {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  color: #ccc;
+}
+
+.profile_settings__label input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  background-color: #222;
+  color: #fff;
+  margin-top: 5px;
+}
+
+.profile_settings__save_button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-bottom: 5px;
+}
+
+.profile_settings__save_button:hover {
+  background-color: #45a049;
+}
+
+.profile_settings__gender_options {
+  display: flex;
+  gap: 15px;
+  margin-top: 5px;
+}
+
+.profile_settings__gender_options label {
+  font-size: 14px;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.profile_settings__date_picker {
+  background-color: #222;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  font-family: inherit;
+}
+
+.profile_settings__date_picker::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* Для стилизации иконки календаря под темный фон */
+  cursor: pointer;
+}
+
+.profile_settings__gender_options input[type="radio"] {
+  accent-color: #4caf50; /* Цвет выбора радио-кнопки */
+  cursor: pointer;
+}
+
+.profile_settings__select {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  background-color: #222;
+  color: #fff;
+  margin-top: 5px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/*.profile_settings__select:focus {
+    border-color: #4caf50;
+    outline: none;
+  }*/
+
+.profile_settings__select option {
+  background-color: #222;
+  color: #fff;
+}
+
+.profile_settings__contacts {
+  margin-left: 20px; /* Отступ слева */
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Расстояние между полями */
+}
+
+.profile_settings_name {
+  color: white;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+.profile_settings_name:nth-child(5) {
+  margin-bottom: 0;
+}
+
+.steam {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #cf7327;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.steam:hover {
+  background-color: #c27e47;
+}
