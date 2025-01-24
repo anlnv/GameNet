@@ -128,7 +128,9 @@ export default function User({ currentUser }) {
 
   const handleUnfollow = async () => {
     try {
-      const response = await callAPI(`/user/${userId}/unfollow`);
+      const response = await callAPI(`/user/${userId}/unfollow`, {
+        method: 'DELETE'
+      });
       // const response = await fetch(
       //   `http://87.242.103.34:5000/user/${userId}/unfollow`,
       //   {

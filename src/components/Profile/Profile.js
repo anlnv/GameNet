@@ -86,7 +86,7 @@ useEffect(() => {
     <div className={styles.profile}>
       <div className={styles.profile__info}>
         {loadingAvatar ? (
-          <div className="profile__avatar_loading">Loading...</div>
+          <div className={styles.profile__avatar_loading}>Loading...</div>
         ) : (
           <div
             className={styles.profile__avatar}

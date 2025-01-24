@@ -68,7 +68,7 @@ export default function ProfileSettings({ profileData, updateProfile }) {
       //     throw new Error(errorData.message || "Failed to update credits");
       //   }
 
-      await updateProfile(payload);
+      // await updateProfile(payload);
       setSuccessMessage("Credits updated successfully!");
     } catch (error) {
       setError(error.message);
