@@ -15,7 +15,9 @@
   font-weight: 500;
   font-size: 14px;
   line-height: 21px;
-  transition: color 0.3s ease, opacity 0.3s ease;
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
 }
 
 .header__link:nth-child(n + 2) {

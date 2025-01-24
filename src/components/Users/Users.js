@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import styles from "./Users.module.css";
-import { callAPI } from "@/utils/api";
+import { useState, useEffect } from 'react';
+import styles from './Users.module.css';
+import { callAPI } from '@/utils/api';
 
 export default function Users() {
   const [users, setUsers] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   // Получаем список пользователей с сервера
@@ -17,7 +17,7 @@ export default function Users() {
         setUsers(data.users);
         setFilteredUsers(data.users); // Изначально показываем всех пользователей
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error('Error fetching users:', error);
       }
     };
     fetchUsers();
@@ -30,7 +30,7 @@ export default function Users() {
 
     // Фильтрация пользователей по имени
     const filtered = users.filter((user) =>
-      user.username.toLowerCase().includes(query.toLowerCase())
+      user.username.toLowerCase().includes(query.toLowerCase()),
     );
     setFilteredUsers(filtered);
   };
@@ -39,11 +39,11 @@ export default function Users() {
     <div className={styles.users_container}>
       <h2 className={styles.users_title}>Users</h2>
       <input
-        type="text"
+        type='text'
         className={styles.users_search}
         value={searchQuery}
         onChange={handleSearchChange}
-        placeholder="Search users..."
+        placeholder='Search users...'
       />
       <div className={styles.users_list}>
         {filteredUsers.length > 0 ? (

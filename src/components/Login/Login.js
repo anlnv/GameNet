@@ -1,37 +1,40 @@
-import { useState } from "react";
-import { useRouter } from 'next/router'
-import { callAPI } from "@/utils/api";
-import styles from "@/styles/auth.module.css";
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { callAPI } from '@/utils/api';
+import styles from '@/styles/auth.module.css';
 
 function Login({ onLoginSuccess }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const router = useRouter();
 
-  if (localStorage.getItem('token') && localStorage.getItem('token') != 'undefined') {
-    router.push('/profile')
+  if (
+    localStorage.getItem('token') &&
+    localStorage.getItem('token') != 'undefined'
+  ) {
+    router.push('/profile');
   }
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     try {
       const data = await callAPI('/auth/token', {
-        method: "POST",
+        method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: { username, password },
       });
-      localStorage.setItem("token", data.token);
+      localStorage.setItem('token', data.token);
       onLoginSuccess(data.token);
-      router.push('/profile')
+      router.push('/profile');
     } catch (err) {
-      setError(err.message || "An error occurred during login.");
-      console.error("Error during login:", err);
+      setError(err.message || 'An error occurred during login.');
+      console.error('Error during login:', err);
     }
   };
 
@@ -44,7 +47,7 @@ function Login({ onLoginSuccess }) {
           <label className={styles.authLabel}>Email:</label>
           <input
             className={styles.authInput}
-            type="text"
+            type='text'
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
@@ -54,19 +57,22 @@ function Login({ onLoginSuccess }) {
           <label className={styles.authLabel}>Password:</label>
           <input
             className={styles.authInput}
-            type="password"
+            type='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
-        <button type="submit" className={styles.authButton}>
+        <button type='submit' className={styles.authButton}>
           Login
         </button>
       </form>
       <p className={styles.authFooter}>
-        Don&apos;t have an account?{" "}
-        <span className={styles.authLink} onClick={() => router.push("/register")}>
+        Don&apos;t have an account?{' '}
+        <span
+          className={styles.authLink}
+          onClick={() => router.push('/register')}
+        >
           Register here
         </span>
       </p>

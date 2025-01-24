@@ -1,39 +1,39 @@
-import { useState } from "react";
-import { callAPI } from "@/utils/api";
+import { useState } from 'react';
+import { callAPI } from '@/utils/api';
 import styles from './Survey.module.css';
 
 export default function Survey() {
   const [currentStep, setCurrentStep] = useState(0);
   const [surveyData, setSurveyData] = useState({
     genres: [],
-    experience: "",
-    purpose: "", // Новое поле: цель поиска напарника
-    preferred_communication: "", // Новое поле: предпочтительный формат общения
-    hours_per_week: "", // Новое поле: количество часов игры в неделю
+    experience: '',
+    purpose: '', // Новое поле: цель поиска напарника
+    preferred_communication: '', // Новое поле: предпочтительный формат общения
+    hours_per_week: '', // Новое поле: количество часов игры в неделю
     platforms: [],
   });
 
   const steps = [
     {
-      title: "Какие жанры игр вам больше всего нравятся?",
+      title: 'Какие жанры игр вам больше всего нравятся?',
       content: (
         <>
           {[
-            "Шутеры (FPS)",
-            "Многопользовательские онлайн-игры (MMO)",
-            "Ролевые игры (RPG)",
-            "MOBA",
-            "Стратегии (RTS/Turn-based)",
-            "Спортивные симуляторы",
-            "Приключенческие игры",
-            "Гонки",
-            "Киберспортивные игры",
+            'Шутеры (FPS)',
+            'Многопользовательские онлайн-игры (MMO)',
+            'Ролевые игры (RPG)',
+            'MOBA',
+            'Стратегии (RTS/Turn-based)',
+            'Спортивные симуляторы',
+            'Приключенческие игры',
+            'Гонки',
+            'Киберспортивные игры',
           ].map((genre, idx) => (
             <label key={idx}>
               <input
-                type="checkbox"
+                type='checkbox'
                 value={genre}
-                onChange={(e) => handleCheckboxChange(e, "genres")}
+                onChange={(e) => handleCheckboxChange(e, 'genres')}
                 checked={surveyData.genres.includes(genre)}
               />
               {genre}
@@ -43,14 +43,14 @@ export default function Survey() {
       ),
     },
     {
-      title: "С какой целью вы ищете напарника?",
+      title: 'С какой целью вы ищете напарника?',
       content: (
         <>
-          {["Для развлечения", "Для участия в киберспортивных турнирах"].map(
+          {['Для развлечения', 'Для участия в киберспортивных турнирах'].map(
             (option) => (
               <label key={option}>
                 <input
-                  type="radio"
+                  type='radio'
                   value={option}
                   onChange={(e) =>
                     setSurveyData({ ...surveyData, purpose: e.target.value })
@@ -59,19 +59,19 @@ export default function Survey() {
                 />
                 {option}
               </label>
-            )
+            ),
           )}
         </>
       ),
     },
     {
-      title: "Как вы оцениваете свой игровой опыт?",
+      title: 'Как вы оцениваете свой игровой опыт?',
       content: (
         <>
-          {["Начинающий", "Средний", "Продвинутый"].map((level) => (
+          {['Начинающий', 'Средний', 'Продвинутый'].map((level) => (
             <label key={level}>
               <input
-                type="radio"
+                type='radio'
                 value={level}
                 onChange={(e) =>
                   setSurveyData({ ...surveyData, experience: e.target.value })
@@ -85,14 +85,14 @@ export default function Survey() {
       ),
     },
     {
-      title: "Какой формат взаимодействия с другими игроками вам подходит?",
+      title: 'Какой формат взаимодействия с другими игроками вам подходит?',
       content: (
         <>
-          {["Голосовой чат", "Внутриигровой текстовый чат", "Никакой"].map(
+          {['Голосовой чат', 'Внутриигровой текстовый чат', 'Никакой'].map(
             (option) => (
               <label key={option}>
                 <input
-                  type="radio"
+                  type='radio'
                   value={option}
                   onChange={(e) =>
                     setSurveyData({
@@ -104,18 +104,18 @@ export default function Survey() {
                 />
                 {option}
               </label>
-            )
+            ),
           )}
         </>
       ),
     },
     {
-      title: "Сколько часов в неделю вы играете?",
+      title: 'Сколько часов в неделю вы играете?',
       content: (
         <>
           <input
-            type="number"
-            placeholder="Введите количество часов"
+            type='number'
+            placeholder='Введите количество часов'
             value={surveyData.hours_per_week}
             onChange={(e) =>
               setSurveyData({
@@ -123,27 +123,27 @@ export default function Survey() {
                 hours_per_week: e.target.value,
               })
             }
-            min="0"
+            min='0'
           />
         </>
       ),
     },
     {
-      title: "На какой платформе вы играете?",
+      title: 'На какой платформе вы играете?',
       content: (
         <>
           {[
-            "ПК",
-            "PlayStation",
-            "Xbox",
-            "Nintendo Switch",
-            "Мобильные игры",
+            'ПК',
+            'PlayStation',
+            'Xbox',
+            'Nintendo Switch',
+            'Мобильные игры',
           ].map((platform) => (
             <label key={platform}>
               <input
-                type="checkbox"
+                type='checkbox'
                 value={platform}
-                onChange={(e) => handleCheckboxChange(e, "platforms")}
+                onChange={(e) => handleCheckboxChange(e, 'platforms')}
                 checked={surveyData.platforms.includes(platform)}
               />
               {platform}
@@ -182,7 +182,7 @@ export default function Survey() {
         hours_per_week: Number(surveyData.hours_per_week),
       });
       const result = await callAPI(`/user/update-me`, {
-        method: "PATCH",
+        method: 'PATCH',
         body: body,
       });
       // const response = await fetch("http://87.242.103.34:5000/user/updateme", {
@@ -198,8 +198,8 @@ export default function Survey() {
       //       hours_per_week: Number(surveyData.hours_per_week),
       //     }),
       //   });
-      console.log("Данные успешно отправлены:", result);
-      alert("Данные успешно сохранены!");
+      console.log('Данные успешно отправлены:', result);
+      alert('Данные успешно сохранены!');
 
       // if (response.ok) {
       //   const result = await response.json();
@@ -210,8 +210,8 @@ export default function Survey() {
       //   alert("Не удалось сохранить данные. Попробуйте снова.");
       // }
     } catch (error) {
-      console.error("Ошибка сети:", error);
-      alert("Произошла ошибка. Проверьте соединение с сетью.");
+      console.error('Ошибка сети:', error);
+      alert('Произошла ошибка. Проверьте соединение с сетью.');
     }
   };
 

@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { callAPI } from "@/utils/api";
-import CloseButtonIcon from "@/../public/images/close-button.svg";
-import styles from '@/components/Profile/Profile.module.css'
-import styles2 from '@/components/Users/Users.module.css' 
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { callAPI } from '@/utils/api';
+import CloseButtonIcon from '@/../public/images/close-button.svg';
+import styles from '@/components/Profile/Profile.module.css';
+import styles2 from '@/components/Users/Users.module.css';
 
 export default function User({ currentUser }) {
   const router = useRouter();
@@ -19,13 +19,13 @@ export default function User({ currentUser }) {
   const [communityList, setCommunityList] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState(""); // 'followers', 'following', or 'communities'
+  const [modalType, setModalType] = useState(''); // 'followers', 'following', or 'communities'
   const [userPosts, setUserPosts] = useState([]);
 
   useEffect(() => {
     if (userData && userData.id === currentUser.id) {
       // Если ID пользователя не совпадает с текущим, перенаправляем на главную страницу
-      navigate("/home");
+      router.push('/profile');
     }
   }, [userData, currentUser, router]);
 
@@ -35,7 +35,7 @@ export default function User({ currentUser }) {
         const result = await callAPI(`/posts/${userId}/get-posts`);
         setUserPosts(Array.isArray(result.posts) ? result.posts : []);
       } catch (error) {
-        console.error("Error fetching posts:", error);
+        console.error('Error fetching posts:', error);
         setUserPosts([]);
       }
     }
@@ -52,10 +52,12 @@ export default function User({ currentUser }) {
           setUserData(data);
 
           const avatarData = await callAPI(
-            `/user/${userId}/get-avatar?user_id=${userId}`
+            `/user/${userId}/get-avatar?user_id=${userId}`,
           );
           setAvatarUrl(
-            avatarData.avatar_url !== "no avatar" ? avatarData.avatar_url : null
+            avatarData.avatar_url !== 'no avatar'
+              ? avatarData.avatar_url
+              : null,
           );
 
           const followersData = await callAPI(`/user/${userId}/followers`);
@@ -70,17 +72,17 @@ export default function User({ currentUser }) {
           setCommunityList(followingData.communities || []);
 
           const followingDataCheck = await callAPI(
-            `/user/${currentUser?.id}/following`
+            `/user/${currentUser?.id}/following`,
           );
           const isFollowed = followingDataCheck.users.some(
-            (user) => user.id === parseInt(userId, 10)
+            (user) => user.id === parseInt(userId, 10),
           );
           setIsFollowing(isFollowed);
         } else {
-          console.error("User data not found or incorrect structure", data);
+          console.error('User data not found or incorrect structure', data);
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error('Error fetching user data:', error);
       } finally {
         setLoading(false);
       }
@@ -94,8 +96,8 @@ export default function User({ currentUser }) {
 
   const handleFollow = async () => {
     try {
-      const response = await callAPI(`/user/${userId}/follow`, {
-        method: "POST",
+      await callAPI(`/user/${userId}/follow`, {
+        method: 'POST',
       });
       // const response = await fetch(
       //   `http://87.242.103.34:5000/user/${userId}/follow`,
@@ -122,14 +124,14 @@ export default function User({ currentUser }) {
       //   setIsFollowing(true);
       // }
     } catch (error) {
-      console.error("Error following user:", error);
+      console.error('Error following user:', error);
     }
   };
 
   const handleUnfollow = async () => {
     try {
-      const response = await callAPI(`/user/${userId}/unfollow`, {
-        method: 'DELETE'
+      await callAPI(`/user/${userId}/unfollow`, {
+        method: 'DELETE',
       });
       // const response = await fetch(
       //   `http://87.242.103.34:5000/user/${userId}/unfollow`,
@@ -157,7 +159,7 @@ export default function User({ currentUser }) {
       //   setIsFollowing(false);
       // }
     } catch (error) {
-      console.error("Error unfollowing user:", error);
+      console.error('Error unfollowing user:', error);
     }
   };
 
@@ -171,7 +173,7 @@ export default function User({ currentUser }) {
   };
 
   const handleNameClick = (type, id) => {
-    const path = type === "user" ? `/user/${id}` : `/community/${id}`;
+    const path = type === 'user' ? `/user/${id}` : `/community/${id}`;
     router.push(path);
     closeModal(); // Закрываем модальное окно при переходе на пользователя/комьюнити
   };
@@ -184,7 +186,7 @@ export default function User({ currentUser }) {
       <div className={styles.profile__info}>
         <div
           className={styles.profile__avatar}
-          style={{ backgroundImage: avatarUrl ? `url(${avatarUrl})` : "none" }}
+          style={{ backgroundImage: avatarUrl ? `url(${avatarUrl})` : 'none' }}
         >
           {!avatarUrl && (
             <span className={styles.profile__avatar_text}>No avatar</span>
@@ -193,7 +195,7 @@ export default function User({ currentUser }) {
         <div className={styles.profile__text}>
           <p className={styles.profile__text_name}>{userData.username}</p>
           <p className={styles.profile__text_nick}>
-            Steam ID: {userData.contacts?.steam || "Not specified"}
+            Steam ID: {userData.contacts?.steam || 'Not specified'}
           </p>
         </div>
       </div>
@@ -208,7 +210,7 @@ export default function User({ currentUser }) {
             <button
               className={styles.profile__button}
               onClick={handleFollow}
-              style={{ backgroundColor: "rgb(89, 120, 199)" }}
+              style={{ backgroundColor: 'rgb(89, 120, 199)' }}
             >
               Follow
             </button>
@@ -216,14 +218,26 @@ export default function User({ currentUser }) {
       </div>
 
       <div className={styles.profile__stats}>
-        <div className={styles.profile__stat} onClick={() => openModal("followers")}>
-          {followersCount} <p className={styles.profile__stat_text}>Followers</p>
+        <div
+          className={styles.profile__stat}
+          onClick={() => openModal('followers')}
+        >
+          {followersCount}{' '}
+          <p className={styles.profile__stat_text}>Followers</p>
         </div>
-        <div className={styles.profile__stat} onClick={() => openModal("following")}>
-          {followingCount} <p className={styles.profile__stat_text}>Following</p>
+        <div
+          className={styles.profile__stat}
+          onClick={() => openModal('following')}
+        >
+          {followingCount}{' '}
+          <p className={styles.profile__stat_text}>Following</p>
         </div>
-        <div className={styles.profile__stat} onClick={() => openModal("communities")}>
-          {communityCount} <p className={styles.profile__stat_text}>Communities</p>
+        <div
+          className={styles.profile__stat}
+          onClick={() => openModal('communities')}
+        >
+          {communityCount}{' '}
+          <p className={styles.profile__stat_text}>Communities</p>
         </div>
       </div>
 
@@ -231,17 +245,17 @@ export default function User({ currentUser }) {
       <div className={styles.profile__details}>
         <div className={styles.profile__details_grid}>
           <p className={styles.profile__detail}>
-            <strong>Gender:</strong> {userData.gender || "Not specified"}
+            <strong>Gender:</strong> {userData.gender || 'Not specified'}
           </p>
           <p className={styles.profile__detail}>
-            <strong>Purpose:</strong> {userData.purpose || "Not specified"}
+            <strong>Purpose:</strong> {userData.purpose || 'Not specified'}
           </p>
           <p className={styles.profile__detail}>
-            <strong>Preferred Communication:</strong>{" "}
-            {userData.preferred_communication || "Not specified"}
+            <strong>Preferred Communication:</strong>{' '}
+            {userData.preferred_communication || 'Not specified'}
           </p>
           <p className={styles.profile__detail}>
-            <strong>Hours Per Week:</strong> {userData.hours_per_week || "0"}
+            <strong>Hours Per Week:</strong> {userData.hours_per_week || '0'}
           </p>
         </div>
       </div>
@@ -257,7 +271,7 @@ export default function User({ currentUser }) {
               <div key={post.id} className={styles2.posts__item}>
                 <p>{post.content}</p>
                 {post.media_files && post.media_files.length > 0 && (
-                  <img src={post.media_files[0].file_url} alt="Post" />
+                  <img src={post.media_files[0].file_url} alt='Post' />
                 )}
                 <span className={styles2.post_date}>
                   {new Date(post.created_at).toLocaleString()}
@@ -269,53 +283,56 @@ export default function User({ currentUser }) {
 
       {isModalOpen && (
         <div className={styles.modal} onClick={closeModal}>
-          <div className={styles.modal__content} onClick={(e) => e.stopPropagation()}>
+          <div
+            className={styles.modal__content}
+            onClick={(e) => e.stopPropagation()}
+          >
             <button className={styles.modal__close} onClick={closeModal}>
-              <img src={CloseButtonIcon} alt="Close" />
+              <img src={CloseButtonIcon} alt='Close' />
             </button>
             <h2>
-              {modalType === "followers"
-                ? "Followers"
-                : modalType === "following"
-                ? "Following"
-                : "Communities"}
+              {modalType === 'followers'
+                ? 'Followers'
+                : modalType === 'following'
+                  ? 'Following'
+                  : 'Communities'}
             </h2>
             <ul>
-              {modalType === "followers" &&
+              {modalType === 'followers' &&
                 followersList.map((user) => (
                   <li
                     key={user.id}
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent modal close on click
-                      handleNameClick("user", user.id);
+                      handleNameClick('user', user.id);
                     }}
-                    className="clickable"
+                    className='clickable'
                   >
                     {user.username}
                   </li>
                 ))}
-              {modalType === "following" &&
+              {modalType === 'following' &&
                 followingList.map((user) => (
                   <li
                     key={user.id}
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent modal close on click
-                      handleNameClick("user", user.id);
+                      handleNameClick('user', user.id);
                     }}
-                    className="clickable"
+                    className='clickable'
                   >
                     {user.username}
                   </li>
                 ))}
-              {modalType === "communities" &&
+              {modalType === 'communities' &&
                 communityList.map((community) => (
                   <li
                     key={community.id}
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent modal close on click
-                      handleNameClick("community", community.id);
+                      handleNameClick('community', community.id);
                     }}
-                    className="clickable"
+                    className='clickable'
                   >
                     {community.name}
                   </li>

@@ -5,8 +5,7 @@ import { useAuth } from '@/utils/useAuth';
 export default function ProfilePage() {
   const { profileData, loading } = useAuth();
 
-  if (loading)
-    return <LoadingPage/>
+  if (loading) return <LoadingPage />;
 
-  return <Profile profileData={profileData}/>;
+  return <Profile profileData={profileData} />;
 }

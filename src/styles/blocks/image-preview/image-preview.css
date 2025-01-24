@@ -1,32 +1,32 @@
 .image-preview {
-    margin-top: 10px;
-    display: flex;
-    position: relative;
-    display: flex;
-    align-items: center; /* Центрирование по вертикали */
-    justify-content: center; 
-  }
-  
-  .image-preview img {
-    max-width: 500px;
-    max-height: 500px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-  }
-  
-  .image-preview button {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: #ff4d4f;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .image-preview button:hover {
-    background-color: #900020; /* Цвет при наведении */
-  }
+  margin-top: 10px;
+  display: flex;
+  position: relative;
+  display: flex;
+  align-items: center; /* Центрирование по вертикали */
+  justify-content: center;
+}
+
+.image-preview img {
+  max-width: 500px;
+  max-height: 500px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.image-preview button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.image-preview button:hover {
+  background-color: #900020; /* Цвет при наведении */
+}

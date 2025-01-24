@@ -90,7 +90,7 @@
   cursor: pointer;
 }
 
-.profile_settings__gender_options input[type="radio"] {
+.profile_settings__gender_options input[type='radio'] {
   accent-color: #4caf50; /* Цвет выбора радио-кнопки */
   cursor: pointer;
 }

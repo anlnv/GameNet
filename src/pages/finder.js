@@ -1,6 +1,6 @@
-import Finder from "@/components/Finder/Finder";
-import LoadingPage from "@/components/Loading/Loading";
-import { useAuth } from "@/utils/useAuth";
+import Finder from '@/components/Finder/Finder';
+import LoadingPage from '@/components/Loading/Loading';
+import { useAuth } from '@/utils/useAuth';
 
 export default function FinderPage() {
   const { profileData, loading } = useAuth();

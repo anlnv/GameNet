@@ -1,4 +1,4 @@
-import Survey from "@/components/Survey/Survey";
+import Survey from '@/components/Survey/Survey';
 
 export default function SurveyPage() {
   return <Survey />;

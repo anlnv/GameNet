@@ -1,37 +1,33 @@
 .profile__details {
-    padding: 10px 20px;
-    background: #2a2a2a;
-    border-radius: 10px;
-    color: #ccc; /* Цвет текста */
-    width: 100%; /* На всю ширину блока */
-  }
-  
-  .profile__details-heading {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #fff;
-  }
-  
-  .profile__details-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Два равных столбца */
-    gap: 5px; /* Отступы между элементами */
-  }
-  
-  
-  .profile__detail {
-    font-size: 16px;
-    margin: 5px 0;
-    line-height: 1.5;
-  }
-  
-  .profile__detail strong {
-    color: rgb(89, 120, 199); /* Новый акцентный цвет */
-  }
-  
- 
+  padding: 10px 20px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  color: #ccc; /* Цвет текста */
+  width: 100%; /* На всю ширину блока */
+}
 
+.profile__details-heading {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.profile__details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Два равных столбца */
+  gap: 5px; /* Отступы между элементами */
+}
+
+.profile__detail {
+  font-size: 16px;
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+.profile__detail strong {
+  color: rgb(89, 120, 199); /* Новый акцентный цвет */
+}
 
 .modal {
   position: fixed;
@@ -78,7 +74,6 @@
   overflow-y: auto;
   position: relative; /* Для правильного позиционирования кнопки */
 }
-
 
 ul {
   list-style-type: none;

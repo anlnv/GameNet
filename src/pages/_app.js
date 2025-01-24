@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { useRouter } from 'next/router'
-import { callAPI } from "@/utils/api";
-import Header from "../components/Header/Header";
-import LoadingPage from "@/components/Loading/Loading";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { callAPI } from '@/utils/api';
+import Header from '../components/Header/Header';
+import LoadingPage from '@/components/Loading/Loading';
 import '@/styles/globals.css';
 
 export default function App({ Component, pageProps }) {
@@ -15,10 +15,10 @@ export default function App({ Component, pageProps }) {
 
   const checkAuth = async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("No token found");
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('No token found');
 
-      const data = await callAPI("/user/me");
+      const data = await callAPI('/user/me');
       setProfileData(data);
       setIsLoggedIn(true);
 
@@ -27,12 +27,12 @@ export default function App({ Component, pageProps }) {
       // }
     } catch (error) {
       console.error(`Ошибка авторизации: ${error.message}`);
-      localStorage.removeItem("token");
+      localStorage.removeItem('token');
       setIsLoggedIn(false);
 
       // Переход на /login только если мы не там
-      if (router.pathname !== "/login") {
-        router.push("/login");
+      if (router.pathname !== '/login') {
+        router.push('/login');
       }
     } finally {
       setIsAuthChecked(true);
@@ -47,35 +47,35 @@ export default function App({ Component, pageProps }) {
   }, [isAuthChecked]);
 
   const handleLoginSuccess = (token) => {
-    localStorage.setItem("token", token);
+    localStorage.setItem('token', token);
     setIsLoggedIn(true);
     router.push('/profile');
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem('token');
     setProfileData(null);
     setIsLoggedIn(false);
     router.push('/login');
   };
 
-  if (loading) return <LoadingPage/>
+  if (loading) return <LoadingPage />;
 
   // if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="page">
+    <div className='page'>
       {isLoggedIn && <Header onLogout={handleLogout} />}
       {!isLoggedIn ? (
         <Component
-        {...pageProps}
-        profileData={profileData}
-        onLoginSuccess={handleLoginSuccess}
-        isAuthChecked={isAuthChecked}
-        // isLoggedIn={isLoggedIn}
-        // handleLoginSuccess={handleLoginSuccess}
-        // handleLogout={handleLogout}
-      />
+          {...pageProps}
+          profileData={profileData}
+          onLoginSuccess={handleLoginSuccess}
+          isAuthChecked={isAuthChecked}
+          // isLoggedIn={isLoggedIn}
+          // handleLoginSuccess={handleLoginSuccess}
+          // handleLogout={handleLogout}
+        />
       ) : (
         <Component {...pageProps} profileData={profileData} />
       )}

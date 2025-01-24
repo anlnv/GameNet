@@ -1,31 +1,31 @@
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { callAPI } from "@/utils/api";
-import styles from "./Finder.module.css";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { callAPI } from '@/utils/api';
+import styles from './Finder.module.css';
 
 export default function Finder({ profileData }) {
   const [showRecommendations, setShowRecommendations] = useState(false);
   const [recommendedUsers, setRecommendedUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const userId = profileData.id; // Идентификатор текущего пользователя
 
   const fetchRecommendedUsers = async () => {
     setLoading(true);
-    const token = localStorage.getItem("token");
-      if (!token) {
-        if (router.pathname !== "/login") {
-          router.push("/login");
-        }
-        setLoading(false);
-        return;
+    const token = localStorage.getItem('token');
+    if (!token) {
+      if (router.pathname !== '/login') {
+        router.push('/login');
       }
+      setLoading(false);
+      return;
+    }
 
     try {
-        const data = await callAPI(`/rs/${userId}/find`);
-        setRecommendedUsers(data.mates); // Данные пользователей в mates
+      const data = await callAPI(`/rs/${userId}/find`);
+      setRecommendedUsers(data.mates); // Данные пользователей в mates
     } catch (err) {
       setError(err.message);
     } finally {
@@ -36,10 +36,6 @@ export default function Finder({ profileData }) {
   const handleLetsGoClick = () => {
     fetchRecommendedUsers();
     setShowRecommendations(true);
-  };
-
-  const handleAddFriend = (userName) => {
-    alert(`${userName} added as a friend!`);
   };
 
   const handleProfileRedirect = (userId) => {
@@ -68,7 +64,7 @@ export default function Finder({ profileData }) {
                   >
                     {user.username}
                   </span>
-                  <span className={styles.user_score}>{user.score}</span>{" "}
+                  <span className={styles.user_score}>{user.score}</span>{' '}
                   {/* Можно показывать очки */}
                 </div>
               </li>

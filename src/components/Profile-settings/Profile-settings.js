@@ -1,32 +1,32 @@
-import { useState } from "react";
-import styles from "./Profile-settings.module.css";
-import { callAPI } from "@/utils/api";
+import { useState } from 'react';
+import styles from './Profile-settings.module.css';
+import { callAPI } from '@/utils/api';
 
 export default function ProfileSettings({ profileData, updateProfile }) {
   const [username, setUsername] = useState(profileData.username);
   const [dateOfBirth, setDateOfBirth] = useState(profileData.date_of_birth);
-  const [gender, setGender] = useState(profileData.gender || "male");
-  const [purpose, setPurpose] = useState(profileData.purpose || "");
+  const [gender, setGender] = useState(profileData.gender || 'male');
+  const [purpose, setPurpose] = useState(profileData.purpose || '');
   const [selfAssessment, setSelfAssessment] = useState(
-    profileData.self_assessment_lvl || ""
+    profileData.self_assessment_lvl || '',
   );
   const [preferredCommunication, setPreferredCommunication] = useState(
-    profileData.preferred_communication || ""
+    profileData.preferred_communication || '',
   );
   const [hoursPerWeek, setHoursPerWeek] = useState(
-    profileData.hours_per_week || 0
+    profileData.hours_per_week || 0,
   );
   const [contacts, setContacts] = useState(
     profileData.contacts || {
-      vk: "",
-      telegram: "",
-      steam: "",
-      discord: "",
-    }
+      vk: '',
+      telegram: '',
+      steam: '',
+      discord: '',
+    },
   );
-  const [newAvatar, setNewAvatar] = useState("");
-  const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [newAvatar, setNewAvatar] = useState('');
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleContactsChange = (e, platform) => {
@@ -39,8 +39,8 @@ export default function ProfileSettings({ profileData, updateProfile }) {
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    setError("");
-    setSuccessMessage("");
+    setError('');
+    setSuccessMessage('');
 
     try {
       const payload = {
@@ -50,8 +50,8 @@ export default function ProfileSettings({ profileData, updateProfile }) {
       };
       // const body = JSON.stringify(payload);
 
-      const response = await callAPI(`/user/change-credits`, {
-        method: "PATCH",
+      await callAPI(`/user/change-credits`, {
+        method: 'PATCH',
         body: payload,
       });
       //   const response = await fetch("http://87.242.103.34:5000/user/change-credits", {
@@ -69,7 +69,7 @@ export default function ProfileSettings({ profileData, updateProfile }) {
       //   }
 
       // await updateProfile(payload);
-      setSuccessMessage("Credits updated successfully!");
+      setSuccessMessage('Credits updated successfully!');
     } catch (error) {
       setError(error.message);
     } finally {
@@ -83,21 +83,21 @@ export default function ProfileSettings({ profileData, updateProfile }) {
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    setError("");
-    setSuccessMessage("");
+    setError('');
+    setSuccessMessage('');
 
     try {
       const updatedContacts = Object.fromEntries(
         Object.entries(contacts).map(([key, value]) => [
           key,
           value !== profileData.contacts?.[key] ? value : null,
-        ])
+        ]),
       );
 
       const payload = { ...updatedContacts };
       // const body = JSON.stringify(payload);
-      const response = await callAPI(`/user/update-me-contacts`, {
-        method: "PATCH",
+      await callAPI(`/user/update-me-contacts`, {
+        method: 'PATCH',
         body: payload,
       });
       // const response = await fetch("http://87.242.103.34:5000/user/update-me-contacts", {
@@ -115,7 +115,7 @@ export default function ProfileSettings({ profileData, updateProfile }) {
       // }
 
       // await updateProfile({ contacts });
-      setSuccessMessage("Contacts updated successfully!");
+      setSuccessMessage('Contacts updated successfully!');
     } catch (error) {
       setError(error.message);
     } finally {
@@ -129,8 +129,8 @@ export default function ProfileSettings({ profileData, updateProfile }) {
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    setError("");
-    setSuccessMessage("");
+    setError('');
+    setSuccessMessage('');
 
     try {
       const payload = {
@@ -149,8 +149,8 @@ export default function ProfileSettings({ profileData, updateProfile }) {
       // console.log(payload);
       // const body = JSON.stringify(payload);
 
-      const response = await callAPI(`/user/update-me`, {
-        method: "PATCH",
+      await callAPI(`/user/update-me`, {
+        method: 'PATCH',
         body: payload,
       });
       // const response = await fetch("http://87.242.103.34:5000/user/update-me", {
@@ -168,7 +168,7 @@ export default function ProfileSettings({ profileData, updateProfile }) {
       // }
 
       // await updateProfile(payload);
-      setSuccessMessage("Basic info updated successfully!");
+      setSuccessMessage('Basic info updated successfully!');
     } catch (error) {
       setError(error.message);
     } finally {
@@ -182,15 +182,15 @@ export default function ProfileSettings({ profileData, updateProfile }) {
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    setError("");
-    setSuccessMessage("");
+    setError('');
+    setSuccessMessage('');
 
     try {
       const formData = new FormData();
-      formData.append("new_avatar", newAvatar);
+      formData.append('new_avatar', newAvatar);
 
-      const response = await callAPI(`/user/update-me-avatar`, {
-        method: "PATCH",
+      await callAPI(`/user/update-me-avatar`, {
+        method: 'PATCH',
         body: formData,
       });
       // const response = await fetch("http://87.242.103.34:5000/user/update-me-avatar", {
@@ -207,7 +207,7 @@ export default function ProfileSettings({ profileData, updateProfile }) {
       // }
 
       await updateProfile({ new_avatar: newAvatar });
-      setSuccessMessage("Avatar updated successfully!");
+      setSuccessMessage('Avatar updated successfully!');
     } catch (error) {
       setError(error.message);
     } finally {
@@ -218,7 +218,7 @@ export default function ProfileSettings({ profileData, updateProfile }) {
   // Обработчик для подключения Steam
   const handleConnectSteam = async () => {
     try {
-      const response = await callAPI(`/auth/steam/login`);
+      await callAPI(`/auth/steam/login`);
       // const response = await fetch("http://87.242.103.34:5000/auth/steam/login", {
       //   method: "GET",
       //   headers: {
@@ -231,7 +231,7 @@ export default function ProfileSettings({ profileData, updateProfile }) {
       //   throw new Error(errorData.message || "Failed to connect Steam");
       // }
 
-      setSuccessMessage("Steam account connected successfully!");
+      setSuccessMessage('Steam account connected successfully!');
     } catch (error) {
       setError(error.message);
     }
@@ -253,7 +253,7 @@ export default function ProfileSettings({ profileData, updateProfile }) {
           Username:
           <input
             className={styles.profile_settings__input}
-            type="text"
+            type='text'
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -262,14 +262,14 @@ export default function ProfileSettings({ profileData, updateProfile }) {
           Date of Birth:
           <input
             className={styles.profile_settings__input}
-            type="date"
+            type='date'
             value={dateOfBirth}
             onChange={(e) => setDateOfBirth(e.target.value)}
           />
         </label>
         <button
           className={styles.profile_settings__save_button}
-          type="submit"
+          type='submit'
           disabled={isSubmitting}
         >
           Save Credits
@@ -287,15 +287,15 @@ export default function ProfileSettings({ profileData, updateProfile }) {
             value={gender}
             onChange={(e) => setGender(e.target.value)}
           >
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+            <option value='male'>Male</option>
+            <option value='female'>Female</option>
           </select>
         </label>
         <label className={styles.profile_settings__label}>
           Purpose:
           <input
             className={styles.profile_settings__input}
-            type="text"
+            type='text'
             value={purpose}
             onChange={(e) => setPurpose(e.target.value)}
           />
@@ -304,7 +304,7 @@ export default function ProfileSettings({ profileData, updateProfile }) {
           Self-Assessment Level:
           <input
             className={styles.profile_settings__input}
-            type="text"
+            type='text'
             value={selfAssessment}
             onChange={(e) => setSelfAssessment(e.target.value)}
           />
@@ -313,7 +313,7 @@ export default function ProfileSettings({ profileData, updateProfile }) {
           Preferred Communication:
           <input
             className={styles.profile_settings__input}
-            type="text"
+            type='text'
             value={preferredCommunication}
             onChange={(e) => setPreferredCommunication(e.target.value)}
           />
@@ -322,14 +322,14 @@ export default function ProfileSettings({ profileData, updateProfile }) {
           Hours Per Week:
           <input
             className={styles.profile_settings__input}
-            type="number"
+            type='number'
             value={hoursPerWeek}
             onChange={(e) => setHoursPerWeek(e.target.value)}
           />
         </label>
         <button
           className={styles.profile_settings__save_button}
-          type="submit"
+          type='submit'
           disabled={isSubmitting}
         >
           Save Basic Info
@@ -346,7 +346,7 @@ export default function ProfileSettings({ profileData, updateProfile }) {
           <input
             className={styles.profile_settings__input}
             value={contacts.vk}
-            onChange={(e) => handleContactsChange(e, "vk")}
+            onChange={(e) => handleContactsChange(e, 'vk')}
           />
         </label>
         <label className={styles.profile_settings__label}>
@@ -354,7 +354,7 @@ export default function ProfileSettings({ profileData, updateProfile }) {
           <input
             className={styles.profile_settings__input}
             value={contacts.telegram}
-            onChange={(e) => handleContactsChange(e, "telegram")}
+            onChange={(e) => handleContactsChange(e, 'telegram')}
           />
         </label>
         <label className={styles.profile_settings__label}>
@@ -362,7 +362,7 @@ export default function ProfileSettings({ profileData, updateProfile }) {
           <input
             className={styles.profile_settings__input}
             value={contacts.steam}
-            onChange={(e) => handleContactsChange(e, "steam")}
+            onChange={(e) => handleContactsChange(e, 'steam')}
           />
         </label>
         <label className={styles.profile_settings__label}>
@@ -370,12 +370,12 @@ export default function ProfileSettings({ profileData, updateProfile }) {
           <input
             className={styles.profile_settings__input}
             value={contacts.discord}
-            onChange={(e) => handleContactsChange(e, "discord")}
+            onChange={(e) => handleContactsChange(e, 'discord')}
           />
         </label>
         <button
           className={styles.profile_settings__save_button}
-          type="submit"
+          type='submit'
           disabled={isSubmitting}
         >
           Save Contacts
@@ -390,13 +390,13 @@ export default function ProfileSettings({ profileData, updateProfile }) {
           New Avatar:
           <input
             className={styles.profile_settings__input}
-            type="file"
+            type='file'
             onChange={(e) => setNewAvatar(e.target.files[0])}
           />
         </label>
         <button
           className={styles.profile_settings__save_button}
-          type="submit"
+          type='submit'
           disabled={isSubmitting}
         >
           Save Avatar

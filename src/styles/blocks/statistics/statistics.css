@@ -1,12 +1,12 @@
 .statistics {
-    display: flex;
-    flex-direction: column;
-    max-width: 960px;
-    margin: 0px auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 960px;
+  margin: 0px auto;
 
-    font-style: normal;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 23px;
-    color: #FFFFFF;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 23px;
+  color: #ffffff;
 }
