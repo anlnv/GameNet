@@ -1,37 +1,55 @@
 .profile__details {
-    padding: 10px 20px;
-    background: #2a2a2a;
-    border-radius: 10px;
-    color: #ccc; /* Цвет текста */
-    width: 100%; /* На всю ширину блока */
-  }
-  
-  .profile__details-heading {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #fff;
-  }
-  
-  .profile__details-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Два равных столбца */
-    gap: 5px; /* Отступы между элементами */
-  }
-  
-  
-  .profile__detail {
-    font-size: 16px;
-    margin: 5px 0;
-    line-height: 1.5;
-  }
-  
-  .profile__detail strong {
-    color: rgb(89, 120, 199); /* Новый акцентный цвет */
-  }
-  
- 
+  padding: 10px 20px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  color: #ccc;
+  width: 100%;
+}
 
+.profile__pesonal {
+  padding: 10px 10px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  color: #ccc;
+  width: fit-content;
+}
+
+.profile__details-heading {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.profile__details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+
+.profile__detail {
+  font-size: 16px;
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+.profile__detail strong {
+  color: rgb(89, 120, 199);
+}
+
+.profile__bio {
+  margin: 0;
+  max-height: 60px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 24px;
+  color: #A3A6B3;
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+  overflow: hidden;
+}
 
 .modal {
   position: fixed;
@@ -46,37 +64,54 @@
 }
 
 .modal__close {
-  position: absolute; /* Позиционируем кнопку относительно модального окна */
-  top: 10px; /* Расстояние от верхнего края */
-  right: 1px; /* Расстояние от правого края */
-  width: 40px; /* Увеличиваем размер кнопки */
-  height: 40px; /* Увеличиваем размер кнопки */
-  background-color: transparent; /* Прозрачный фон для кнопки */
-  border: none; /* Убираем рамку */
-  cursor: pointer; /* Указатель мыши */
-  justify-content: center; /* Центрирование содержимого по горизонтали */
-  align-items: center; /* Центрирование содержимого по вертикали */
+  position: absolute;
+  /* Позиционируем кнопку относительно модального окна */
+  top: 10px;
+  /* Расстояние от верхнего края */
+  right: 1px;
+  /* Расстояние от правого края */
+  width: 40px;
+  /* Увеличиваем размер кнопки */
+  height: 40px;
+  /* Увеличиваем размер кнопки */
+  background-color: transparent;
+  /* Прозрачный фон для кнопки */
+  border: none;
+  /* Убираем рамку */
+  cursor: pointer;
+  /* Указатель мыши */
+  justify-content: center;
+  /* Центрирование содержимого по горизонтали */
+  align-items: center;
+  /* Центрирование содержимого по вертикали */
 }
 
 .modal__close img {
-  width: 80%; /* Устанавливаем изображение чуть меньше размера кнопки */
-  height: 80%; /* Устанавливаем изображение чуть меньше размера кнопки */
-  display: block; /* Убираем дополнительные отступы */
+  width: 80%;
+  /* Устанавливаем изображение чуть меньше размера кнопки */
+  height: 80%;
+  /* Устанавливаем изображение чуть меньше размера кнопки */
+  display: block;
+  /* Убираем дополнительные отступы */
 }
 
 .modal__close:hover img {
-  filter: brightness(0.8); /* Затемнение изображения при наведении */
-  transform: scale(1.1); /* Легкое увеличение при наведении */
+  filter: brightness(0.8);
+  /* Затемнение изображения при наведении */
+  transform: scale(1.1);
+  /* Легкое увеличение при наведении */
 }
 
 .modal__content {
-  background-color: #2a2a2a; /* Цвет фона модального окна */
+  background-color: #2a2a2a;
+  /* Цвет фона модального окна */
   padding: 20px;
   border-radius: 10px;
   width: 300px;
   max-height: 400px;
   overflow-y: auto;
-  position: relative; /* Для правильного позиционирования кнопки */
+  position: relative;
+  /* Для правильного позиционирования кнопки */
 }
 
 
@@ -89,3 +124,134 @@ li {
   padding: 10px 0;
   border-bottom: 1px solid #ddd;
 }
+
+.section {
+  margin-top: 35px;
+  padding: 0 15px;
+  border-radius: 10px;
+  color: #fff;
+  width: 100%;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+.games-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.game-item {
+  background: #444;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.game-item:hover {
+  background: #555;
+  transform: scale(1.1);
+}
+
+.show-more-btn {
+  margin-top: 10px;
+  padding: 6px 12px;
+  background: #414a9d;
+  /* Ярко-синий цвет */
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.show-more-btn:hover {
+  background: #405bb5;
+  transform: scale(1.05);
+}
+
+.arrow {
+  display: inline-block;
+  margin-left: 8px;
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(45deg);
+}
+
+.arrow.up {
+  transform: rotate(-135deg);
+}
+
+.profile__details {
+  font-size: 14px;
+  color: #888;
+}
+
+.contacts {
+  background: #2a2a2a;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 350px;
+}
+
+.contacts__title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.contacts__list {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  /*justify-content: space-between;*/
+}
+
+.contacts__item {
+  display: flex;
+  width: 285px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  /*background: #1e1e2e;*/
+  border-radius: 8px;
+  transition: background 0.2s ease, transform 0.2s ease;
+  /*border: #97b7f6 0.5px solid;*/
+  border: 1px solid rgba(64, 69, 79, 1);
+  justify-content: center;
+}
+
+.contacts__item:hover {
+  background: #29293d;
+  transform: scale(1.05);
+}
+
+.contacts__icon {
+  font-size: 22px;
+  color: #97b7f6;
+  padding-top: 5px;
+}
+
+.contacts__username {
+  font-size: 16px;
+  font-weight: 500;
+  color: #d1d1d1;
+  white-space: nowrap;
+}
+

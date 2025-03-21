@@ -17,10 +17,10 @@ function Communities({profileData}) {
         const token = localStorage.getItem("token");
 
         const [allCommunitiesResponse, subscribedResponse] = await Promise.all([
-          fetch("http://87.242.103.34:5000/community/", {
+          fetch("http://46.149.72.161:5000/community/", {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch(`http://87.242.103.34:5000/user/${profileData.id}/following`, {
+          fetch(`http://46.149.72.161:5000/user/${profileData.id}/following`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -58,7 +58,7 @@ function Communities({profileData}) {
       setSuccessMessage("");
 
       const token = localStorage.getItem("token");
-      const response = await fetch("http://87.242.103.34:5000/community/create", {
+      const response = await fetch("http://46.149.72.161:5000/community/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

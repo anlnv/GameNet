@@ -1,4 +1,5 @@
 .profile__info {
     display: flex;
     margin: 16px;
+    max-width: 960px;
 }

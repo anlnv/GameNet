@@ -1,0 +1,129 @@
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .title {
+    margin-left: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .header-actions {
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-box {
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .search-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    margin-left: 5px;
+  }
+  
+  .icons {
+    display: flex;
+    gap: 10px;
+    margin-left: 20px;
+  }
+  
+  .icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    margin-left: 15px;
+  }
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .profile-info {
+    flex: 1;
+  }
+  
+  .profile-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .profile-bio {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .follow-button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .stats {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .stat-item {
+    text-align: center;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .stat-label {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  

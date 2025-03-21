@@ -10,7 +10,7 @@ const UserWall = ({ profileData }) => {
     if (profileData && profileData.id) {
       try {
         const response = await fetch(
-          `http://87.242.103.34:5000/posts/${profileData.id}/get-posts`
+          `http://46.149.72.161:5000/posts/${profileData.id}/get-posts`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch posts");
@@ -41,7 +41,7 @@ const UserWall = ({ profileData }) => {
         }
 
         const token = localStorage.getItem("token");
-        const response = await fetch("http://87.242.103.34:5000/posts/create", {
+        const response = await fetch("http://46.149.72.161:5000/posts/create", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,

@@ -475,6 +475,7 @@ function App() {
   const [isAuthChecked, setIsAuthChecked] = useState(false);
 
   const navigate = useNavigate();
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   // Функция проверки токена при загрузке приложения
   const checkAuth = async () => {
@@ -482,7 +483,7 @@ function App() {
     
     if (token) {
       try {
-        const response = await fetch("http://87.242.103.34:5000/user/me", {
+        const response = await fetch( `${API_BASE_URL}/user/me`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`,
@@ -552,7 +553,6 @@ function App() {
               element={
                 <div>
                   <Profile profileData={profileData} />
-                  <UserWall profileData={profileData} />
                 </div>
               }
             />

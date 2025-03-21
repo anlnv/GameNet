@@ -18,7 +18,7 @@ function CommunityDetails({ profileData }) {
   useEffect(() => {
     const fetchCommunityDetails = async () => {
       try {
-        const response = await fetch(`http://87.242.103.34:5000/community/${id}`);
+        const response = await fetch(`http://46.149.72.161:5000/community/${id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch community details");
         }
@@ -27,7 +27,7 @@ function CommunityDetails({ profileData }) {
         setIsOwner(data.creator_id === userId);
 
         const followingResponse = await fetch(
-          `http://87.242.103.34:5000/user/${userId}/following`
+          `http://46.149.72.161:5000/user/${userId}/following`
         );
         const followingData = await followingResponse.json();
         const subscribedCommunities = followingData.communities.map(
@@ -52,7 +52,7 @@ function CommunityDetails({ profileData }) {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://87.242.103.34:5000/posts/create", {
+      const response = await fetch("http://46.149.72.161:5000/posts/create", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -101,7 +101,7 @@ function CommunityDetails({ profileData }) {
   };*/
 
   const handleSubscription = async () => {
-    const url = `http://87.242.103.34:5000/community/${id}/${isSubscribed ? "leave" : "join"}`;
+    const url = `http://46.149.72.161:5000/community/${id}/${isSubscribed ? "leave" : "join"}`;
     const method = isSubscribed ? "DELETE" : "POST";
 
     try {

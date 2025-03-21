@@ -1,544 +1,756 @@
-/*import { useState } from "react";
+/*import React, { useState } from 'react';
 import "./ps.css";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://46.149.72.161:5000";
 
-function ProfileSettings({ profileData, updateProfile }) {
-  const [name, setName] = useState(profileData.name);
-  const [nickname, setNickname] = useState(profileData.nickname);
-  const [avatar, setAvatar] = useState(profileData.avatar);
-
-  const handleSave = () => {
-    updateProfile({ name, nickname, avatar });
-  };
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => setAvatar(e.target.result);
-      reader.readAsDataURL(file);
+const ProfileSettings = ({ profileData, updateProfile }) => {
+  const [activeTab, setActiveTab] = useState('personal');
+  const [formData, setFormData] = useState({
+    personal: {
+      username: profileData?.username || '',
+      birthDate: profileData?.dob || ''
+    },
+    contacts: {
+      telegram: profileData?.contacts?.telegram || '',
+      discord: profileData?.contacts?.discord || '',
+      steam: profileData?.contacts?.steam || ''
+    },
+    password: {
+      newPassword: '',
+      confirmPassword: ''
     }
-  };
-
-  return (
-    <div className="profile-settings">
-      <h2>Profile Settings</h2>
-      <div className="profile-settings__form">
-        <label className="profile-settings__label">
-          Name:
-          <input
-            className="profile-settings__input"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </label>
-        <label  className="profile-settings__label">
-          Nickname:
-          <input
-            className="profile-settings__input"
-            type="text"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-          />
-        </label>
-        <label className="profile-settings__label profile-settings__label_avatar">
-          Avatar:
-          <input type="file" onChange={handleImageChange} />
-        </label>
-        <div className="profile-settings__avatar-preview">
-          <img src={avatar} alt="Avatar preview" />
-        </div>
-        <button className="profile-settings__save-button" onClick={handleSave}>Save Changes</button>
-      </div>
-    </div>
-  );
-}
-
-export default ProfileSettings;*/
-
-/*import { useState } from "react";
-import "./ps.css";
-
-function ProfileSettings({ profileData, updateProfile }) {
-  const [username, setUsername] = useState(profileData.username);
-  const [email, setEmail] = useState(profileData.email);
-  const [gender, setGender] = useState(profileData.gender);
-  const [date_of_birth, setDate] = useState(profileData.date_of_birth);
-  const [contacts, setContacts] = useState(profileData.contacts);
-  const [new_avatar, setAvatar] = useState(profileData.new_avatar);
-  const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSave = async (e) => {
-    e.preventDefault();
-
-    if (isSubmitting) return;
-
-    setIsSubmitting(true);
-    setError("");
-    setSuccessMessage("");
-
-    try {
-      const token = localStorage.getItem("token");
-      const payload = { gender, contacts, new_avatar }; 
-
-      const response = await fetch("http://87.242.103.34:5000/user/updatecreds", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update profile");
-      }
-
-      await updateProfile(payload);
-      setSuccessMessage("Profile updated successfully!");
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  return (
-    <div className="profile-settings">
-      <h2>Profile Settings</h2>
-      {error && <p className="error-message">{error}</p>}
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      <div className="profile-settings__form">
-        <label className="profile-settings__label">
-          Username:
-          <input
-            className="profile-settings__input"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </label>
-        <label className="profile-settings__label">
-          Email:
-          <input
-            className="profile-settings__input"
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
-        <label className="profile-settings__label">
-          Gender:
-          <input
-            className="profile-settings__input"
-            type="text"
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
-          />
-        </label>
-        <label className="profile-settings__label">
-          Date of birth:
-          <input
-            className="profile-settings__input"
-            type="text"
-            value={date_of_birth}
-            onChange={(e) => setDate(e.target.value)}
-          />
-        </label>
-     
-        <label className="profile-settings__label">
-          Contacts:
-          <input
-            className="profile-settings__input"
-            type="text"
-            value={contacts}
-            onChange={(e) => setContacts(e.target.value)}
-          />
-        </label>
-        <label className="profile-settings__label">
-          Avatar:
-          <input
-            className="profile-settings__input"
-            type="text"
-            value={new_avatar}
-            onChange={(e) => setAvatar(e.target.value)}
-          />
-        </label>
-        <button
-          className="profile-settings__save-button"
-          onClick={handleSave}
-          disabled={isSubmitting}
-        >
-          Save Changes
-        </button>
-      </div>
-    </div>
-  );
-}
-
-export default ProfileSettings;*/
-
-import { useState } from "react";
-import "./ps.css";
-
-function ProfileSettings({ profileData, updateProfile }) {
-  const [username, setUsername] = useState(profileData.username);
-  const [dateOfBirth, setDateOfBirth] = useState(profileData.date_of_birth);
-  const [gender, setGender] = useState(profileData.gender || "male");
-  const [purpose, setPurpose] = useState(profileData.purpose || "");
-  const [selfAssessment, setSelfAssessment] = useState(profileData.self_assessment_lvl || "");
-  const [preferredCommunication, setPreferredCommunication] = useState(profileData.preferred_communication || "");
-  const [hoursPerWeek, setHoursPerWeek] = useState(profileData.hours_per_week || 0);
-  const [contacts, setContacts] = useState(profileData.contacts || {
-    vk: "",
-    telegram: "",
-    steam: "",
-    discord: "",
   });
-  const [newAvatar, setNewAvatar] = useState("");
-  const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleContactsChange = (e, platform) => {
-    setContacts({ ...contacts, [platform]: e.target.value });
+  const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setErrors({});
+    setSuccessMessage('');
   };
 
-  const handleSaveCredits = async (e) => {
-    e.preventDefault();
+  const handleChange = (tab, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [tab]: {
+        ...prev[tab],
+        [field]: value
+      }
+    }));
+  };
 
-    if (isSubmitting) return;
+  const validatePassword = () => {
+    const { newPassword, confirmPassword } = formData.password;
+    if (newPassword !== confirmPassword) return 'Passwords do not match';
+    return '';
+  };
 
-    setIsSubmitting(true);
-    setError("");
-    setSuccessMessage("");
+  const handleSubmit = async (tab) => {
+    setIsLoading(true);
+    setErrors({});
 
     try {
-      const token = localStorage.getItem("token");
-      const payload = {
-        new_username: username !== profileData.username ? username : null,
-        new_password: null,
-        new_dob: dateOfBirth !== profileData.date_of_birth ? dateOfBirth : null,
-      };
+      const token = localStorage.getItem('token');
 
-      const response = await fetch("http://87.242.103.34:5000/user/change-credits", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
+      if (tab === 'personal') {
+        const payload = {
+          new_username: 
+            formData.personal.username !== profileData.username 
+              ? formData.personal.username 
+              : null,
+          new_dob: 
+            formData.personal.birthDate !== profileData.dob 
+              ? formData.personal.birthDate 
+              : null
+        };
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update credits");
+        if (payload.new_username === null && payload.new_dob === null) {
+          throw new Error("No changes detected");
+        }
+
+        const response = await fetch(
+          `${API_BASE_URL}/user/credits`,
+          {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to update credits');
+        }
+
+        const updatedPersonal = {
+          username: payload.new_username !== null ? formData.personal.username : profileData.username,
+          dob: payload.new_dob !== null ? formData.personal.birthDate : profileData.dob
+        };
+        await updateProfile({ ...profileData, ...updatedPersonal });
+        setSuccessMessage('Personal info updated successfully!');
+      } else if (tab === 'contacts') {
+        const payload = {
+          telegram: 
+            formData.contacts.telegram !== profileData.contacts?.telegram 
+              ? formData.contacts.telegram 
+              : null,
+          discord: 
+            formData.contacts.discord !== profileData.contacts?.discord 
+              ? formData.contacts.discord 
+              : null,
+          steam: 
+            formData.contacts.steam !== profileData.contacts?.steam 
+              ? formData.contacts.steam 
+              : null
+        };
+
+        if (Object.values(payload).every(v => v === null)) {
+          throw new Error("No changes detected");
+        }
+
+        const response = await fetch(
+          `${API_BASE_URL}/user/contacts`,
+          {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to update contacts');
+        }
+
+        const updatedContacts = {};
+        Object.entries(payload).forEach(([key, value]) => {
+          if (value !== null) {
+            updatedContacts[key] = value;
+          }
+        });
+        
+        await updateProfile({ contacts: updatedContacts });
+        setSuccessMessage("Contacts updated successfully!");
+      } else if (tab === 'password') {
+        const passwordError = validatePassword();
+        if (passwordError) {
+          setErrors({ password: passwordError });
+          setIsLoading(false);
+          return;
+        }
+
+        const newPassword = formData.password.newPassword.trim();
+        if (!newPassword) {
+          throw new Error("New password is required");
+        }
+
+        const payload = {
+          new_password: newPassword
+        };
+
+        const response = await fetch(
+          `${API_BASE_URL}/user/change-password`,
+          {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to change password');
+        }
+
+        setSuccessMessage('Password changed successfully!');
+        setFormData(prev => ({
+          ...prev,
+          password: { newPassword: '', confirmPassword: '' }
+        }));
       }
 
-      await updateProfile(payload);
-      setSuccessMessage("Credits updated successfully!");
+      setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
-      setError(error.message);
+      setErrors({ common: error.message });
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 
-  const handleSaveContacts = async (e) => {
-    e.preventDefault();
-
-    if (isSubmitting) return;
-
-    setIsSubmitting(true);
-    setError("");
-    setSuccessMessage("");
-
-    try {
-      const token = localStorage.getItem("token");
-      const updatedContacts = Object.fromEntries(
-        Object.entries(contacts).map(([key, value]) => [
-          key,
-          value !== profileData.contacts?.[key] ? value : null,
-        ])
-      );
-
-      const payload = { ...updatedContacts };
-
-      const response = await fetch("http://87.242.103.34:5000/user/update-me-contacts", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update contacts");
-      }
-
-      await updateProfile({ contacts });
-      setSuccessMessage("Contacts updated successfully!");
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsSubmitting(false);
-    }
+  // Новая вкладка для подключения Steam
+  const handleSteamConnect = () => {
+    window.location.href = `${API_BASE_URL}/auth/steam/login`;
   };
 
-  const handleSaveBasicInfo = async (e) => {
-    e.preventDefault();
+  return (
+    <div className="settings-container">
+      <div className="settings-tabs">
+        <div 
+          className={`tab ${activeTab === 'personal' ? 'active' : ''}`}
+          onClick={() => handleTabChange('personal')}
+        >
+          Personal Information
+        </div>
+        <div 
+          className={`tab ${activeTab === 'contacts' ? 'active' : ''}`}
+          onClick={() => handleTabChange('contacts')}
+        >
+          Contacts
+        </div>
+        <div 
+          className={`tab ${activeTab === 'password' ? 'active' : ''}`}
+          onClick={() => handleTabChange('password')}
+        >
+          Change Password
+        </div>
+        <div 
+          className={`tab ${activeTab === 'steam' ? 'active' : ''}`}
+          onClick={() => handleTabChange('steam')}
+        >
+          Steam Integration
+        </div>
+      </div>
 
-    if (isSubmitting) return;
+      <div className="settings-content">
+        {activeTab === 'personal' && (
+          <div className="personal-tab">
+            <div className="input-group">
+              <label>Username</label>
+              <input 
+                type="text"
+                value={formData.personal.username}
+                onChange={e => handleChange('personal', 'username', e.target.value)}
+              />
+            </div>
+            <div className="input-group">
+              <label>Date of Birth</label>
+              <input 
+                type="date"
+                value={formData.personal.birthDate ? formData.personal.birthDate.split('T')[0] : ''}
+                onChange={e => handleChange('personal', 'birthDate', e.target.value)}
+              />
+            </div>
+            <button 
+              className="save-btn"
+              onClick={() => handleSubmit('personal')}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+        )}
 
-    setIsSubmitting(true);
-    setError("");
-    setSuccessMessage("");
+        {activeTab === 'contacts' && (
+          <div className="contacts-tab">
+            <div className="input-group">
+              <label>Telegram</label>
+              <input 
+                type="text"
+                value={formData.contacts.telegram}
+                onChange={e => handleChange('contacts', 'telegram', e.target.value)}
+              />
+            </div>
+            <div className="input-group">
+              <label>Discord</label>
+              <input 
+                type="text"
+                value={formData.contacts.discord}
+                onChange={e => handleChange('contacts', 'discord', e.target.value)}
+              />
+            </div>
+            <div className="input-group">
+              <label>Steam</label>
+              <input 
+                type="text"
+                value={formData.contacts.steam}
+                onChange={e => handleChange('contacts', 'steam', e.target.value)}
+              />
+            </div>
+            <button 
+              className="save-btn"
+              onClick={() => handleSubmit('contacts')}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+        )}
 
-    try {
-      const token = localStorage.getItem("token");
-      const payload = {
-        purpose: purpose !== profileData.purpose ? purpose : null,
-        self_assessment_lvl: selfAssessment !== profileData.self_assessment_lvl ? selfAssessment : null,
-        preferred_communication: preferredCommunication !== profileData.preferred_communication ? preferredCommunication : null,
-        hours_per_week: hoursPerWeek !== profileData.hours_per_week ? hoursPerWeek : null,
-      };
+        {activeTab === 'password' && (
+          <div className="password-tab">
+            <div className="input-group">
+              <label>New Password</label>
+              <input 
+                type="password"
+                value={formData.password.newPassword}
+                onChange={e => handleChange('password', 'newPassword', e.target.value)}
+              />
+            </div>
+            <div className="input-group">
+              <label>Confirm Password</label>
+              <input 
+                type="password"
+                value={formData.password.confirmPassword}
+                onChange={e => handleChange('password', 'confirmPassword', e.target.value)}
+              />
+            </div>
+            {errors.password && <p className="error-message">{errors.password}</p>}
+            <button 
+              className="save-btn"
+              onClick={() => handleSubmit('password')}
+              disabled={
+                isLoading || 
+                !formData.password.newPassword || 
+                !formData.password.confirmPassword || 
+                validatePassword() !== ''
+              }
+            >
+              {isLoading ? 'Updating...' : 'Change Password'}
+            </button>
+          </div>
+        )}
 
-      const response = await fetch("http://87.242.103.34:5000/user/update-me", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
+        {activeTab === 'steam' && (
+          <div className="steam-tab">
+            <p>
+              To import your Steam information, connect your Steam account:
+            </p>
+            <button 
+              className="save-btn"
+              onClick={handleSteamConnect}
+              disabled={isLoading}
+            >
+              Connect Steam
+            </button>
+          </div>
+        )}
+      </div>
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update basic info");
-      }
+      {successMessage && <div className="success-message">{successMessage}</div>}
+      {errors.common && <div className="error-message">{errors.common}</div>}
+    </div>
+  );
+};
 
-      await updateProfile(payload);
-      setSuccessMessage("Basic info updated successfully!");
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsSubmitting(false);
+export default ProfileSettings;*/
+
+import React, { useState } from 'react';
+import './ps.css';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://46.149.72.161:5000";
+
+const ProfileSettings = ({ profileData, updateProfile }) => {
+  const [activeTab, setActiveTab] = useState('personal');
+  const [formData, setFormData] = useState({
+    personal: {
+      username: profileData?.username || '',
+      birthDate: profileData?.dob || '',
+      bio: profileData?.bio || '',
+    },
+    contacts: {
+      telegram: profileData?.contacts?.telegram || '',
+      discord: profileData?.contacts?.discord || '',
+      steam: profileData?.contacts?.steam || ''
+    },
+    password: {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
     }
+  });
+
+  const [avatarFile, setAvatarFile] = useState(null); // Новое состояние для аватара
+  const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setErrors({});
+    setSuccessMessage('');
   };
 
-  const handleSaveAvatar = async (e) => {
-    e.preventDefault();
-
-    if (isSubmitting) return;
-
-    setIsSubmitting(true);
-    setError("");
-    setSuccessMessage("");
-
-    try {
-      const token = localStorage.getItem("token");
-      const formData = new FormData();
-      formData.append("new_avatar", newAvatar);
-
-      const response = await fetch("http://87.242.103.34:5000/user/update-me-avatar", {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update avatar");
+  const handleChange = (tab, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [tab]: {
+        ...prev[tab],
+        [field]: value
       }
-
-      await updateProfile({ new_avatar: newAvatar });
-      setSuccessMessage("Avatar updated successfully!");
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsSubmitting(false);
-    }
+    }));
   };
 
-  // Обработчик для подключения Steam
-  const handleConnectSteam = async () => {
+  const validatePassword = () => {
+    const { newPassword, confirmPassword } = formData.password;
+    return newPassword === confirmPassword ? '' : 'Passwords do not match';
+  };
+
+  const handleSubmit = async (tab) => {
+    setIsLoading(true);
+    setErrors({});
+
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
 
-      const response = await fetch("http://87.242.103.34:5000/auth/steam/login", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      if (tab === 'personal') {
+        const payload = new FormData();
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to connect Steam");
+        // Поля для персональных данных
+        payload.append('new_username', 
+          formData.personal.username !== profileData.username 
+            ? formData.personal.username 
+            : null
+        );
+
+        payload.append('new_dob', 
+          formData.personal.birthDate !== profileData.dob 
+            ? formData.personal.birthDate 
+            : null
+        );
+
+        payload.append('new_bio', 
+          formData.personal.bio !== profileData.bio 
+            ? formData.personal.bio 
+            : null
+        );
+
+        // Добавление аватара
+        if (avatarFile) {
+          payload.append('new_avatar', avatarFile);
+        } else {
+          payload.append('new_avatar', null);
+        }
+
+        // Проверка на наличие изменений
+        if (
+          payload.get('new_username') === null &&
+          payload.get('new_dob') === null &&
+          payload.get('new_bio') === null
+        ) {
+          throw new Error("No changes detected");
+        }
+
+        const response = await fetch(
+          `${API_BASE_URL}/user/credits`,
+          {
+            method: 'PATCH',
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            body: payload
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to update');
+        }
+
+        // Обновление данных профиля
+        const updatedData = {
+          username: formData.personal.username,
+          dob: formData.personal.birthDate,
+          bio: formData.personal.bio,
+        };
+        await updateProfile(updatedData);
+        setSuccessMessage('Profile updated successfully!');
+      } else if (tab === 'contacts') {
+        // Логика для контактов (оставлена без изменений)
+        const payload = {
+          telegram: formData.contacts.telegram !== profileData.contacts?.telegram 
+            ? formData.contacts.telegram 
+            : null,
+          discord: formData.contacts.discord !== profileData.contacts?.discord 
+            ? formData.contacts.discord 
+            : null,
+          steam: formData.contacts.steam !== profileData.contacts?.steam 
+            ? formData.contacts.steam 
+            : null
+        };
+
+        if (Object.values(payload).every(v => v === null)) {
+          throw new Error("No changes detected");
+        }
+
+        const response = await fetch(
+          `${API_BASE_URL}/user/contacts`,
+          {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to update contacts');
+        }
+
+        const updatedContacts = {};
+        Object.entries(payload).forEach(([key, value]) => {
+          if (value !== null) {
+            updatedContacts[key] = value;
+          }
+        });
+        
+        await updateProfile({ contacts: updatedContacts });
+        setSuccessMessage("Contacts updated successfully!");
+      } else if (tab === 'password') {
+        const passwordError = validatePassword();
+        if (passwordError) {
+          setErrors({ password: passwordError });
+          setIsLoading(false);
+          return;
+        }
+
+        const payload = {
+          current_password: formData.password.currentPassword,
+          new_password: formData.password.newPassword
+        };
+
+        const response = await fetch(
+          `${API_BASE_URL}/user/change-password`,
+          {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to change password');
+        }
+
+        setSuccessMessage('Password changed successfully!');
+        setFormData(prev => ({
+          ...prev,
+          password: {
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: ''
+          }
+        }));
       }
 
-      setSuccessMessage("Steam account connected successfully!");
+      setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
-      setError(error.message);
+      setErrors({ common: error.message });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="profile-settings">
-      <h2>Profile Settings</h2>
-      {error && <p className="error-message">{error}</p>}
-      {successMessage && <p className="success-message">{successMessage}</p>}
-
-      <form className="profile-settings__form" onSubmit={handleSaveCredits}>
-        <label className="profile-settings__label">
-          Username:
-          <input
-            className="profile-settings__input"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </label>
-        <label className="profile-settings__label">
-          Date of Birth:
-          <input
-            className="profile-settings__input"
-            type="date"
-            value={dateOfBirth}
-            onChange={(e) => setDateOfBirth(e.target.value)}
-          />
-        </label>
-        <button className="profile-settings__save-button" type="submit" disabled={isSubmitting}>
-          Save Credits
-        </button>
-      </form>
-
-      <form className="profile-settings__form" onSubmit={handleSaveBasicInfo}>
-        <label className="profile-settings__label">
-          Gender:
-          <select
-            className="profile-settings__select"
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
-          >
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-        </label>
-        <label className="profile-settings__label">
-          Purpose:
-          <input
-            className="profile-settings__input"
-            type="text"
-            value={purpose}
-            onChange={(e) => setPurpose(e.target.value)}
-          />
-        </label>
-        <label className="profile-settings__label">
-          Self-Assessment Level:
-          <input
-            className="profile-settings__input"
-            type="text"
-            value={selfAssessment}
-            onChange={(e) => setSelfAssessment(e.target.value)}
-          />
-        </label>
-        <label className="profile-settings__label">
-          Preferred Communication:
-          <input
-            className="profile-settings__input"
-            type="text"
-            value={preferredCommunication}
-            onChange={(e) => setPreferredCommunication(e.target.value)}
-          />
-        </label>
-        <label className="profile-settings__label">
-          Hours Per Week:
-          <input
-            className="profile-settings__input"
-            type="number"
-            value={hoursPerWeek}
-            onChange={(e) => setHoursPerWeek(e.target.value)}
-          />
-        </label>
-        <button className="profile-settings__save-button" type="submit" disabled={isSubmitting}>
-          Save Basic Info
-        </button>
-      </form>
-
-      <form className="profile-settings__form" onSubmit={handleSaveContacts}>
-        <h3>Contacts</h3>
-        <label className="profile-settings__label">
-          VK:
-          <input
-            className="profile-settings__input"
-            value={contacts.vk}
-            onChange={(e) => handleContactsChange(e, "vk")}
-          />
-        </label>
-        <label className="profile-settings__label">
-          Telegram:
-          <input
-            className="profile-settings__input"
-            value={contacts.telegram}
-            onChange={(e) => handleContactsChange(e, "telegram")}
-          />
-        </label>
-        <label className="profile-settings__label">
-          Steam:
-          <input
-            className="profile-settings__input"
-            value={contacts.steam}
-            onChange={(e) => handleContactsChange(e, "steam")}
-          />
-        </label>
-        <label className="profile-settings__label">
-          Discord:
-          <input
-            className="profile-settings__input"
-            value={contacts.discord}
-            onChange={(e) => handleContactsChange(e, "discord")}
-          />
-        </label>
-        <button className="profile-settings__save-button" type="submit" disabled={isSubmitting}>
-          Save Contacts
-        </button>
-      </form>
-
-      <form className="profile-settings__form" onSubmit={handleSaveAvatar}>
-        <label className="profile-settings__label">
-          New Avatar:
-          <input
-            className="profile-settings__input"
-            type="file"
-            onChange={(e) => setNewAvatar(e.target.files[0])}
-          />
-        </label>
-        <button className="profile-settings__save-button" type="submit" disabled={isSubmitting}>
-          Save Avatar
-        </button>
-      </form>
-
-      
-      <h3>Steam</h3>
-      <div className="profile-settings__integration">
-        <button
-          className="profile-settings__save-button steam"
-          onClick={handleConnectSteam}
-          disabled={isSubmitting}
+    <div className="settings-container">
+      <div className="settings-tabs">
+        <div 
+          className={`tab ${activeTab === 'personal' ? 'active' : ''}`}
+          onClick={() => handleTabChange('personal')}
         >
-          Connect Steam
-        </button>
+          Personal Information
         </div>
+        <div 
+          className={`tab ${activeTab === 'contacts' ? 'active' : ''}`}
+          onClick={() => handleTabChange('contacts')}
+        >
+          Contacts
+        </div>
+        <div 
+          className={`tab ${activeTab === 'password' ? 'active' : ''}`}
+          onClick={() => handleTabChange('password')}
+        >
+          Change Password
+        </div>
+        <div 
+          className={`tab ${activeTab === 'steam' ? 'active' : ''}`}
+          onClick={() => handleTabChange('steam')}
+        >
+          Steam Integration
+        </div>
+      </div>
+
+      <div className="settings-content">
+        {/* Персональные данные */}
+        {activeTab === 'personal' && (
+          <div className="personal-tab">
+            <div className="input-group">
+              <label>Username</label>
+              <input 
+                type="text"
+                value={formData.personal.username}
+                onChange={e => handleChange('personal', 'username', e.target.value)}
+              />
+            </div>
+
+            <div className="input-group">
+              <label>Date of Birth</label>
+              <input 
+                type="date"
+                value={formData.personal.birthDate}
+                onChange={e => handleChange('personal', 'birthDate', e.target.value)}
+              />
+            </div>
+
+            {/* Новое поле для bio */}
+            <div className="input-group">
+              <label>Bio</label>
+              <textarea 
+                className="bio-input"
+                value={formData.personal.bio}
+                onChange={e => handleChange('personal', 'bio', e.target.value)}
+              />
+            </div>
+
+            <button 
+              className="save-btn"
+              onClick={() => handleSubmit('personal')}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Saving...' : 'Save Changes'}
+            </button>
+
+              {/* Новое поле для аватара */}
+            <div className="input-group avatar-input">
+              <label>Avatar</label>
+              <input 
+                type="file" 
+                accept="image/*"
+                onChange={(e) => setAvatarFile(e.target.files[0])}
+              />
+              {avatarFile && (
+                <img 
+                  src={URL.createObjectURL(avatarFile)} 
+                  alt="Preview"
+                  className="avatar-preview"
+                />
+              )}
+            </div>
+
+            <button 
+              className="save-btn"
+              onClick={() => handleSubmit('personal')}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Saving...' : 'Save Changes'}
+            </button>
+
+          </div>
+        )}
+
+        {/* Контакты */}
+        {activeTab === 'contacts' && (
+          <div className="contacts-tab">
+            <div className="input-group">
+              <label>Telegram</label>
+              <input 
+                type="text"
+                value={formData.contacts.telegram}
+                onChange={e => handleChange('contacts', 'telegram', e.target.value)}
+              />
+            </div>
+            <div className="input-group">
+              <label>Discord</label>
+              <input 
+                type="text"
+                value={formData.contacts.discord}
+                onChange={e => handleChange('contacts', 'discord', e.target.value)}
+              />
+            </div>
+            <div className="input-group">
+              <label>Steam</label>
+              <input 
+                type="text"
+                value={formData.contacts.steam}
+                onChange={e => handleChange('contacts', 'steam', e.target.value)}
+              />
+            </div>
+            <button 
+              className="save-btn"
+              onClick={() => handleSubmit('contacts')}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+        )}
+
+        {/* Изменение пароля */}
+        {activeTab === 'password' && (
+          <div className="password-tab">
+            <div className="input-group">
+              <label>Current Password</label>
+              <input 
+                type="password"
+                value={formData.password.currentPassword}
+                onChange={e => handleChange('password', 'currentPassword', e.target.value)}
+              />
+            </div>
+            <div className="input-group">
+              <label>New Password</label>
+              <input 
+                type="password"
+                value={formData.password.newPassword}
+                onChange={e => handleChange('password', 'newPassword', e.target.value)}
+              />
+            </div>
+            <div className="input-group">
+              <label>Confirm Password</label>
+              <input 
+                type="password"
+                value={formData.password.confirmPassword}
+                onChange={e => handleChange('password', 'confirmPassword', e.target.value)}
+              />
+            </div>
+            {errors.password && <p className="error">{errors.password}</p>}
+            <button 
+              className="save-btn"
+              onClick={() => handleSubmit('password')}
+              disabled={
+                isLoading || 
+                !formData.password.newPassword || 
+                !formData.password.confirmPassword || 
+                validatePassword()
+              }
+            >
+              {isLoading ? 'Updating...' : 'Change Password'}
+            </button>
+          </div>
+        )}
+
+        {/* Steam Integration (оставлено без изменений) */}
+        {activeTab === 'steam' && (
+          <div className="steam-tab">
+            <p>To connect Steam, click the button below:</p>
+            <button 
+              className="save-btn"
+              onClick={() => window.location.href = `${API_BASE_URL}/auth/steam/login`}
+            >
+              Connect Steam
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Сообщения об успехе/ошибках */}
+      {successMessage && <div className="success">{successMessage}</div>}
+      {errors.common && <div className="error">{errors.common}</div>}
     </div>
   );
-}
+};
 
 export default ProfileSettings;

@@ -29,8 +29,6 @@ function Header(props) {
       <p className="header__name">GameNet</p>
       <div className="header__links">
         <Link to="/home" className="header__link">Home</Link>
-        <Link to="/feed" className="header__link">Feed</Link>
-        <Link to="/communities" className="header__link">Communities</Link>
         <Link to="/finder" className="header__link">Finder</Link>
       </div>
       <nav className="navbar">

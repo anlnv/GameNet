@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./info.css";
 import CloseButtonIcon from "../images/close-button.svg";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 function User({ currentUser }) {
   const { userId } = useParams();
   const navigate = useNavigate();
@@ -31,7 +33,7 @@ function User({ currentUser }) {
     if (userId) {
       try {
         const response = await fetch(
-          `http://87.242.103.34:5000/posts/${userId}/get-posts`
+          `${API_BASE_URL}/posts/${userId}/get-posts`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch posts");
@@ -49,7 +51,7 @@ function User({ currentUser }) {
 useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://87.242.103.34:5000/user/${userId}`);
+        const response = await fetch(`${API_BASE_URL}/user/${userId}`);
         const data = await response.json();
   
         if (data && data.id) {
@@ -58,21 +60,21 @@ useEffect(() => {
   
           // Fetch avatar using new endpoint
           const avatarResponse = await fetch(
-            `http://87.242.103.34:5000/user/${userId}/get-avatar?user_id=${userId}`
+            `${API_BASE_URL}/user/${userId}/get-avatar?user_id=${userId}`
           );
           const avatarData = await avatarResponse.json();
           setAvatarUrl(avatarData.avatar_url !== "no avatar" ? avatarData.avatar_url : null);
   
           // Fetch followers, following, and communities
           const followersResponse = await fetch(
-            `http://87.242.103.34:5000/user/${userId}/followers`
+            `${API_BASE_URL}/user/${userId}/followers`
           );
           const followersData = await followersResponse.json();
           setFollowersCount(followersData.users?.length || 0);
           setFollowersList(followersData.users || []);
   
           const followingResponse = await fetch(
-            `http://87.242.103.34:5000/user/${userId}/following`
+            `${API_BASE_URL}/user/${userId}/following`
           );
           const followingData = await followingResponse.json();
           setFollowingCount(followingData.users?.length || 0);
@@ -82,7 +84,7 @@ useEffect(() => {
   
           // Check if following
           const isFollowedResponse = await fetch(
-            `http://87.242.103.34:5000/user/${currentUser?.id}/following`
+            `${API_BASE_URL}/user/${currentUser?.id}/following`
           );
           const followingDataCheck = await isFollowedResponse.json();
           const isFollowed = followingDataCheck.users.some((user) => user.id === parseInt(userId, 10));
@@ -107,7 +109,7 @@ useEffect(() => {
   const handleFollow = async () => {
     try {
       const response = await fetch(
-        `http://87.242.103.34:5000/user/${userId}/follow`,
+        `${API_BASE_URL}/user/${userId}/follow`,
         {
           method: "POST",
           headers: {
@@ -119,7 +121,7 @@ useEffect(() => {
       if (response.ok) {
         // Обновляем состояние подписчиков
         const updatedFollowersResponse = await fetch(
-          `http://87.242.103.34:5000/user/${userId}/followers`
+          `${API_BASE_URL}/user/${userId}/followers`
         );
         const updatedFollowersData = await updatedFollowersResponse.json();
         setFollowersCount(updatedFollowersData.users?.length || 0);
@@ -134,7 +136,7 @@ useEffect(() => {
   const handleUnfollow = async () => {
     try {
       const response = await fetch(
-        `http://87.242.103.34:5000/user/${userId}/unfollow`,
+        `${API_BASE_URL}/user/${userId}/unfollow`,
         {
           method: "DELETE",
           headers: {
@@ -146,7 +148,7 @@ useEffect(() => {
       if (response.ok) {
         // Обновляем состояние подписчиков
         const updatedFollowersResponse = await fetch(
-          `http://87.242.103.34:5000/user/${userId}/followers`
+          `${API_BASE_URL}/user/${userId}/followers`
         );
         const updatedFollowersData = await updatedFollowersResponse.json();
         setFollowersCount(updatedFollowersData.users?.length || 0);

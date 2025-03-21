@@ -1,341 +1,77 @@
-/*import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import './survey.css';
+import games from "./games";
 
-function Survey() {
-  const [currentStep, setCurrentStep] = useState(0); // Управление шагами
-  const [surveyData, setSurveyData] = useState({
-    genres: [],
-    games: "",
-    experience: "",
-    preference: "",
-    interaction: "",
-    schedule: {
-      days: [],
-      time: "",
-    },
-    platform: "",
-    teamPreference: [],
-    esports: "",
-  });
-
-  const steps = [
-    {
-      title: "Какие жанры игр вам больше всего нравятся?",
-      content: (
-        <>
-          {[
-            "Шутеры (FPS)",
-            "Многопользовательские онлайн-игры (MMO)",
-            "Ролевые игры (RPG)",
-            "MOBA",
-            "Стратегии (RTS/Turn-based)",
-            "Спортивные симуляторы",
-            "Приключенческие игры",
-            "Гонки",
-            "Киберспортивные игры",
-          ].map((genre, idx) => (
-            <label key={idx}>
-              <input
-                type="checkbox"
-                value={genre}
-                onChange={(e) => handleCheckboxChange(e, "genres")}
-                checked={surveyData.genres.includes(genre)}
-              />
-              {genre}
-            </label>
-          ))}
-        </>
-      ),
-    },
-    {
-      title: "В какие игры вы играете чаще всего и какой ваш текущий уровень в них?",
-      content: (
-        <>
-          <input
-            type="text"
-            placeholder="Введите название игры"
-            value={surveyData.games}
-            onChange={(e) =>
-              setSurveyData({ ...surveyData, games: e.target.value })
-            }
-          />
-        </>
-      ),
-    },
-    {
-      title: "Как вы оцениваете свой игровой опыт?",
-      content: (
-        <>
-          {["Начинающий", "Средний", "Продвинутый"].map((level) => (
-            <label key={level}>
-              <input
-                type="radio"
-                value={level}
-                onChange={(e) =>
-                  setSurveyData({ ...surveyData, experience: e.target.value })
-                }
-                checked={surveyData.experience === level}
-              />
-              {level}
-            </label>
-          ))}
-        </>
-      ),
-    },
-    {
-      title: "Что для вас важнее: развлечение или победа?",
-      content: (
-        <>
-          {[
-            "Предпочитаю играть ради веселья",
-            "Мне важны победы и достижения",
-            "Мне все равно",
-          ].map((option) => (
-            <label key={option}>
-              <input
-                type="radio"
-                value={option}
-                onChange={(e) =>
-                  setSurveyData({ ...surveyData, preference: e.target.value })
-                }
-                checked={surveyData.preference === option}
-              />
-              {option}
-            </label>
-          ))}
-        </>
-      ),
-    },
-    {
-      title: "Какой формат взаимодействия с другими игроками вам подходит?",
-      content: (
-        <>
-          {[
-            "Активное общение во время игры (голосовой/текстовый чат)",
-            "Предпочитаю минимальное общение",
-            "Играю в тишине, но готов общаться вне игры",
-            "Мне все равно",
-          ].map((option) => (
-            <label key={option}>
-              <input
-                type="radio"
-                value={option}
-                onChange={(e) =>
-                  setSurveyData({ ...surveyData, interaction: e.target.value })
-                }
-                checked={surveyData.interaction === option}
-              />
-              {option}
-            </label>
-          ))}
-        </>
-      ),
-    },
-    {
-      title: "В какие дни вы преимущественно играете?",
-      content: (
-        <>
-          {["Будние", "Выходные"].map((day) => (
-            <label key={day}>
-              <input
-                type="checkbox"
-                value={day}
-                onChange={(e) => handleCheckboxChange(e, "schedule.days")}
-                checked={surveyData.schedule.days.includes(day)}
-              />
-              {day}
-            </label>
-          ))}
-          <h4>В какое время суток вы чаще всего играете?</h4>
-          {[
-            "Утро (6:00 – 12:00)",
-            "День (12:00 – 18:00)",
-            "Вечер (18:00 – 00:00)",
-            "Ночь (00:00 – 6:00)",
-          ].map((time) => (
-            <label key={time}>
-              <input
-                type="radio"
-                value={time}
-                onChange={(e) =>
-                  setSurveyData({
-                    ...surveyData,
-                    schedule: { ...surveyData.schedule, time: e.target.value },
-                  })
-                }
-                checked={surveyData.schedule.time === time}
-              />
-              {time}
-            </label>
-          ))}
-        </>
-      ),
-    },
-    {
-      title: "На какой платформе вы играете?",
-      content: (
-        <>
-          {["ПК", "PlayStation", "Xbox", "Nintendo Switch", "Мобильные игры"].map(
-            (platform) => (
-              <label key={platform}>
-                <input
-                  type="radio"
-                  value={platform}
-                  onChange={(e) =>
-                    setSurveyData({ ...surveyData, platform: e.target.value })
-                  }
-                  checked={surveyData.platform === platform}
-                />
-                {platform}
-              </label>
-            )
-          )}
-        </>
-      ),
-    },
-    {
-      title: "Какие типы игроков вы предпочитаете видеть в своей команде?",
-      content: (
-        <>
-          {[
-            "Опытные игроки",
-            "Новички, готовые учиться",
-            "Дружелюбные и открытые к общению",
-            "Целеустремленные и нацеленные на результат",
-          ].map((type) => (
-            <label key={type}>
-              <input
-                type="checkbox"
-                value={type}
-                onChange={(e) => handleCheckboxChange(e, "teamPreference")}
-                checked={surveyData.teamPreference.includes(type)}
-              />
-              {type}
-            </label>
-          ))}
-        </>
-      ),
-    },
-    {
-      title: "Готовы ли вы участвовать в киберспортивных турнирах и лигах?",
-      content: (
-        <>
-          {["Да", "Нет"].map((option) => (
-            <label key={option}>
-              <input
-                type="radio"
-                value={option}
-                onChange={(e) =>
-                  setSurveyData({ ...surveyData, esports: e.target.value })
-                }
-                checked={surveyData.esports === option}
-              />
-              {option}
-            </label>
-          ))}
-        </>
-      ),
-    },
-  ];
-
-  const handleCheckboxChange = (e, field) => {
-    const { value, checked } = e.target;
-
-    setSurveyData((prevState) => {
-      if (field === "schedule.days") {
-        const updatedDays = checked
-          ? [...prevState.schedule.days, value]
-          : prevState.schedule.days.filter((day) => day !== value);
-
-        return {
-          ...prevState,
-          schedule: {
-            ...prevState.schedule,
-            days: updatedDays,
-          },
-        };
-      } else {
-        const newValues = checked
-          ? [...prevState[field], value]
-          : prevState[field].filter((item) => item !== value);
-
-        return { ...prevState, [field]: newValues };
-      }
-    });
-  };
-
-  const goToNextStep = () => {
-    setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
-  };
-
-  const goToPreviousStep = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
-  };
-
-  const handleSave = () => {
-    console.log("Сохраненные данные:", surveyData);
-    alert("Опрос успешно сохранен!");
-  };
-
-  return (
-    <div className="survey">
-      <h2>{steps[currentStep].title}</h2>
-      <div className="survey-content">{steps[currentStep].content}</div>
-      <div className="survey-navigation">
-        {currentStep > 0 && <button onClick={goToPreviousStep}>Назад</button>}
-        {currentStep < steps.length - 1 && (
-          <button onClick={goToNextStep}>Далее</button>
-        )}
-        {currentStep === steps.length - 1 && (
-          <button onClick={handleSave}>Сохранить</button>
-        )}
-      </div>
-    </div>
-  );
-}
-
-export default Survey;*/
-
-
-
-
-
-/*import React, { useState } from "react";
-import './survey.css';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function Survey() {
   const [currentStep, setCurrentStep] = useState(0);
   const [surveyData, setSurveyData] = useState({
     genres: [],
-    games: "",
-    experience: "",
-    preference: "",
-    interaction: "",
-    schedule: {
-      days: [],
-      time: [],
-    },
-    platforms: [],
-    teamPreference: [],
-    esports: "",
+    preferred_communication: "",
+    purpose: "",
+    preferred_days: "",
+    preferred_time: "",
+    favorite_games: [],
   });
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const gameOptions = [
+    "Counter-Strike", "Dota 2", "League of Legends",
+    "World of Warcraft", "Valorant", "Fortnite",
+    "Apex Legends", "Call of Duty", "Genshin Impact",
+    "Minecraft", "Overwatch 2", "Rocket League"
+  ];
+
+  const filteredGames = games.filter(game =>
+    game.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleGameSelect = (game) => {
+    setSurveyData(prev => ({
+      ...prev,
+      favorite_games: prev.favorite_games.includes(game)
+        ? prev.favorite_games.filter(g => g !== game)
+        : [...prev.favorite_games, game],
+    }));
+  };
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+    setIsDropdownOpen(true);
+  };
+
+  const handleSearchFocus = () => {
+    setIsDropdownOpen(true);
+  };
+
+  const handleClickOutside = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleContainerClick = (e) => {
+    e.stopPropagation();
+    setIsDropdownOpen(prev => !prev);
+  };
 
   const steps = [
     {
       title: "Какие жанры игр вам больше всего нравятся?",
       content: (
-        <>
-          {[
-            "Шутеры (FPS)",
-            "Многопользовательские онлайн-игры (MMO)",
-            "Ролевые игры (RPG)",
-            "MOBA",
-            "Стратегии (RTS/Turn-based)",
-            "Спортивные симуляторы",
-            "Приключенческие игры",
-            "Гонки",
-            "Киберспортивные игры",
-          ].map((genre, idx) => (
+        <div className="checkbox-group">
+          {["Шутеры (FPS)", "MMO", "RPG", "MOBA", "RTS/Turn-based", 
+            "Спортивные симуляторы", "Приключенческие игры", "Гонки", 
+            "Киберспортивные игры"].map((genre, idx) => (
             <label key={idx}>
               <input
                 type="checkbox"
@@ -346,455 +82,199 @@ function Survey() {
               {genre}
             </label>
           ))}
-        </>
+        </div>
       ),
+      validation: () => surveyData.genres.length > 0
     },
     {
-      title: "В какие игры вы играете чаще всего и какой ваш текущий уровень в них?",
+      title: "Какой формат взаимодействия с другими игроками вам подходит?",
       content: (
-        <>
-          <input
-            type="text"
-            placeholder="Введите название игры"
-            value={surveyData.games}
-            onChange={(e) =>
-              setSurveyData({ ...surveyData, games: e.target.value })
-            }
-          />
-        </>
-      ),
-    },
-    {
-      title: "Как вы оцениваете свой игровой опыт?",
-      content: (
-        <>
-          {["Начинающий", "Средний", "Продвинутый"].map((level) => (
-            <label key={level}>
+        <div className="radio-group">
+          {["Активное общение во время игры (голосовой/текстовый чат)", 
+            "Предпочитаю минимальное общение", 
+            "Мне все равно"].map((option) => (
+            <label key={option}>
               <input
                 type="radio"
-                value={level}
-                onChange={(e) =>
-                  setSurveyData({ ...surveyData, experience: e.target.value })
-                }
-                checked={surveyData.experience === level}
+                value={option}
+                onChange={(e) => setSurveyData({ ...surveyData, preferred_communication: e.target.value })}
+                checked={surveyData.preferred_communication === option}
               />
-              {level}
+              {option}
             </label>
           ))}
-        </>
+        </div>
       ),
+      validation: () => surveyData.preferred_communication !== ""
     },
     {
       title: "Что для вас важнее: развлечение или победа?",
       content: (
-        <>
-          {[
-            "Предпочитаю играть ради веселья",
-            "Мне важны победы и достижения",
-            "Мне все равно",
-          ].map((option) => (
+        <div className="radio-group">
+          {["Развлечение", "Победа"].map((option) => (
             <label key={option}>
               <input
                 type="radio"
                 value={option}
-                onChange={(e) =>
-                  setSurveyData({ ...surveyData, preference: e.target.value })
-                }
-                checked={surveyData.preference === option}
+                onChange={(e) => setSurveyData({ ...surveyData, purpose: e.target.value })}
+                checked={surveyData.purpose === option}
               />
               {option}
             </label>
           ))}
-        </>
+        </div>
       ),
+      validation: () => surveyData.purpose !== ""
     },
     {
-      title: "Какой формат взаимодействия с другими игроками вам подходит?",
+      title: "Когда вы играете?",
       content: (
         <>
-          {[
-            "Активное общение во время игры (голосовой/текстовый чат)",
-            "Предпочитаю минимальное общение",
-            "Играю в тишине, но готов общаться вне игры",
-            "Мне все равно",
-          ].map((option) => (
-            <label key={option}>
-              <input
-                type="radio"
-                value={option}
-                onChange={(e) =>
-                  setSurveyData({ ...surveyData, interaction: e.target.value })
-                }
-                checked={surveyData.interaction === option}
-              />
-              {option}
-            </label>
-          ))}
-        </>
-      ),
-    },
-    {
-      title: "В какие дни вы преимущественно играете?",
-      content: (
-        <>
-          {["Будние", "Выходные"].map((day) => (
-            <label key={day}>
-              <input
-                type="checkbox"
-                value={day}
-                onChange={(e) => handleCheckboxChange(e, "schedule.days")}
-                checked={surveyData.schedule.days.includes(day)}
-              />
-              {day}
-            </label>
-          ))}
+          <h4>В какие дни вы преимущественно играете?</h4>
+          <div className="radio-group">
+            {["Будние", "Выходные", "Любые дни"].map((option) => (
+              <label key={option}>
+                <input
+                  type="radio"
+                  value={option}
+                  onChange={(e) => setSurveyData({ ...surveyData, preferred_days: e.target.value })}
+                  checked={surveyData.preferred_days === option}
+                />
+                {option}
+              </label>
+            ))}
+          </div>
           <h4>В какое время суток вы чаще всего играете?</h4>
-          {[
-            "Утро (6:00 – 12:00)",
-            "День (12:00 – 18:00)",
-            "Вечер (18:00 – 00:00)",
-            "Ночь (00:00 – 6:00)",
-          ].map((time) => (
-            <label key={time}>
-              <input
-                type="checkbox"
-                value={time}
-                onChange={(e) => handleCheckboxChange(e, "schedule.time")}
-                checked={surveyData.schedule.time.includes(time)}
-              />
-              {time}
-            </label>
-          ))}
-        </>
-      ),
-    },
-    {
-      title: "На какой платформе вы играете?",
-      content: (
-        <>
-          {["ПК", "PlayStation", "Xbox", "Nintendo Switch", "Мобильные игры"].map(
-            (platform) => (
-              <label key={platform}>
+          <div className="radio-group">
+            {["Утро (6:00 – 12:00)", "День (12:00 – 18:00)", 
+              "Вечер (18:00 – 00:00)", "Ночь (00:00 – 6:00)"].map((option) => (
+              <label key={option}>
                 <input
-                  type="checkbox"
-                  value={platform}
-                  onChange={(e) => handleCheckboxChange(e, "platforms")}
-                  checked={surveyData.platforms.includes(platform)}
+                  type="radio"
+                  value={option}
+                  onChange={(e) => setSurveyData({ ...surveyData, preferred_time: e.target.value })}
+                  checked={surveyData.preferred_time === option}
                 />
-                {platform}
+                {option}
               </label>
-            )
+            ))}
+          </div>
+        </>
+      ),
+      validation: () => 
+        surveyData.preferred_days !== "" && surveyData.preferred_time !== ""
+    },
+    {
+      title: "Какие ваши любимые игры?",
+      content: (
+        <div 
+          className="game-selector" 
+          ref={dropdownRef}
+          onClick={handleContainerClick}
+        >
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Поиск игр..."
+              value={searchQuery}
+              onChange={handleSearch}
+              onFocus={handleSearchFocus}
+              className="search-input"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <span className={`arrow ${isDropdownOpen ? 'open' : ''}`}>▼</span>
+          </div>
+          
+          {isDropdownOpen && (
+            <div className="dropdown-options">
+              {filteredGames.length > 0 ? (
+                filteredGames.map(game => (
+                  <div 
+                    key={game} 
+                    className="option" 
+                    onClick={() => handleGameSelect(game)}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <input
+                      type="checkbox"
+                      id={game}
+                      checked={surveyData.favorite_games.includes(game)}
+                      onChange={() => handleGameSelect(game)}
+                    />
+                    <label htmlFor={game} className="game-label">{game}</label>
+                  </div>
+                ))
+              ) : (
+                <div className="no-results">Ничего не найдено</div>
+              )}
+            </div>
           )}
-        </>
+          
+          <div className="selected-games">
+            {surveyData.favorite_games.map((game, index) => (
+              <div key={index} className="game-tag">
+                {game}
+                <button 
+                  type="button"
+                  className="remove-game"
+                  onClick={() => handleGameSelect(game)}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
       ),
-    },
-    {
-      title: "Какие типы игроков вы предпочитаете видеть в своей команде?",
-      content: (
-        <>
-          {[
-            "Опытные игроки",
-            "Новички, готовые учиться",
-            "Дружелюбные и открытые к общению",
-            "Целеустремленные и нацеленные на результат",
-          ].map((type) => (
-            <label key={type}>
-              <input
-                type="checkbox"
-                value={type}
-                onChange={(e) => handleCheckboxChange(e, "teamPreference")}
-                checked={surveyData.teamPreference.includes(type)}
-              />
-              {type}
-            </label>
-          ))}
-        </>
-      ),
-    },
-    {
-      title: "Готовы ли вы участвовать в киберспортивных турнирах и лигах?",
-      content: (
-        <>
-          {["Да", "Нет"].map((option) => (
-            <label key={option}>
-              <input
-                type="radio"
-                value={option}
-                onChange={(e) =>
-                  setSurveyData({ ...surveyData, esports: e.target.value })
-                }
-                checked={surveyData.esports === option}
-              />
-              {option}
-            </label>
-          ))}
-        </>
-      ),
+      validation: () => surveyData.favorite_games.length > 0
     },
   ];
 
   const handleCheckboxChange = (e, field) => {
     const { value, checked } = e.target;
-
-    setSurveyData((prevState) => {
-      if (field.startsWith("schedule.")) {
-        const subField = field.split(".")[1];
-        const updatedValues = checked
-          ? [...prevState.schedule[subField], value]
-          : prevState.schedule[subField].filter((item) => item !== value);
-
-        return {
-          ...prevState,
-          schedule: {
-            ...prevState.schedule,
-            [subField]: updatedValues,
-          },
-        };
-      } else {
-        const updatedValues = checked
-          ? [...prevState[field], value]
-          : prevState[field].filter((item) => item !== value);
-
-        return { ...prevState, [field]: updatedValues };
-      }
-    });
+    setSurveyData(prevState => ({
+      ...prevState,
+      [field]: checked 
+        ? [...prevState[field], value] 
+        : prevState[field].filter(item => item !== value),
+    }));
   };
 
   const goToNextStep = () => {
-    setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
+    const currentStepData = steps[currentStep];
+    if (currentStepData.validation()) {
+      setCurrentStep(prev => Math.min(prev + 1, steps.length - 1));
+    }
   };
 
   const goToPreviousStep = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
+    setCurrentStep(prev => Math.max(prev - 1, 0));
   };
 
-  const handleSave = () => {
-    console.log("Сохраненные данные:", surveyData);
-    alert("Опрос успешно сохранен!");
-  };
-
-  return (
-    <div className="survey">
-      <h2>{steps[currentStep].title}</h2>
-      <div className="survey-content">{steps[currentStep].content}</div>
-      <div className="survey-navigation">
-        {currentStep > 0 && <button onClick={goToPreviousStep}>Назад</button>}
-        {currentStep < steps.length - 1 && (
-          <button onClick={goToNextStep}>Далее</button>
-        )}
-        {currentStep === steps.length - 1 && (
-          <button onClick={handleSave}>Сохранить</button>
-        )}
-      </div>
-    </div>
-  );
-}
-
-export default Survey;
-*/
-
-import React, { useState } from "react";
-import './survey.css';
-
-function Survey() {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [surveyData, setSurveyData] = useState({
-    genres: [],
-    experience: "",
-    purpose: "", // Новое поле: цель поиска напарника
-    preferred_communication: "", // Новое поле: предпочтительный формат общения
-    hours_per_week: "", // Новое поле: количество часов игры в неделю
-    platforms: [],
-  });
-
-  const steps = [
-    {
-      title: "Какие жанры игр вам больше всего нравятся?",
-      content: (
-        <>
-          {[
-            "Шутеры (FPS)",
-            "Многопользовательские онлайн-игры (MMO)",
-            "Ролевые игры (RPG)",
-            "MOBA",
-            "Стратегии (RTS/Turn-based)",
-            "Спортивные симуляторы",
-            "Приключенческие игры",
-            "Гонки",
-            "Киберспортивные игры",
-          ].map((genre, idx) => (
-            <label key={idx}>
-              <input
-                type="checkbox"
-                value={genre}
-                onChange={(e) => handleCheckboxChange(e, "genres")}
-                checked={surveyData.genres.includes(genre)}
-              />
-              {genre}
-            </label>
-          ))}
-        </>
-      ),
-    },
-    {
-      title: "С какой целью вы ищете напарника?",
-      content: (
-        <>
-          {["Для развлечения", "Для участия в киберспортивных турнирах"].map(
-            (option) => (
-              <label key={option}>
-                <input
-                  type="radio"
-                  value={option}
-                  onChange={(e) =>
-                    setSurveyData({ ...surveyData, purpose: e.target.value })
-                  }
-                  checked={surveyData.purpose === option}
-                />
-                {option}
-              </label>
-            )
-          )}
-        </>
-      ),
-    },
-    {
-      title: "Как вы оцениваете свой игровой опыт?",
-      content: (
-        <>
-          {["Начинающий", "Средний", "Продвинутый"].map((level) => (
-            <label key={level}>
-              <input
-                type="radio"
-                value={level}
-                onChange={(e) =>
-                  setSurveyData({ ...surveyData, experience: e.target.value })
-                }
-                checked={surveyData.experience === level}
-              />
-              {level}
-            </label>
-          ))}
-        </>
-      ),
-    },
-    {
-      title: "Какой формат взаимодействия с другими игроками вам подходит?",
-      content: (
-        <>
-          {["Голосовой чат", "Внутриигровой текстовый чат", "Никакой"].map(
-            (option) => (
-              <label key={option}>
-                <input
-                  type="radio"
-                  value={option}
-                  onChange={(e) =>
-                    setSurveyData({
-                      ...surveyData,
-                      preferred_communication: e.target.value,
-                    })
-                  }
-                  checked={surveyData.preferred_communication === option}
-                />
-                {option}
-              </label>
-            )
-          )}
-        </>
-      ),
-    },
-    {
-      title: "Сколько часов в неделю вы играете?",
-      content: (
-        <>
-          <input
-            type="number"
-            placeholder="Введите количество часов"
-            value={surveyData.hours_per_week}
-            onChange={(e) =>
-              setSurveyData({
-                ...surveyData,
-                hours_per_week: e.target.value,
-              })
-            }
-            min="0"
-          />
-        </>
-      ),
-    },
-    {
-      title: "На какой платформе вы играете?",
-      content: (
-        <>
-          {["ПК", "PlayStation", "Xbox", "Nintendo Switch", "Мобильные игры"].map(
-            (platform) => (
-              <label key={platform}>
-                <input
-                  type="checkbox"
-                  value={platform}
-                  onChange={(e) => handleCheckboxChange(e, "platforms")}
-                  checked={surveyData.platforms.includes(platform)}
-                />
-                {platform}
-              </label>
-            )
-          )}
-        </>
-      ),
-    },
-  ];
-
-  const handleCheckboxChange = (e, field) => {
-    const { value, checked } = e.target;
-    setSurveyData((prevState) => {
-      const updatedValues = checked
-        ? [...prevState[field], value]
-        : prevState[field].filter((item) => item !== value);
-
-      return { ...prevState, [field]: updatedValues };
-    });
-  };
-
-  const goToNextStep = () => {
-    setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
-  };
-
-  const goToPreviousStep = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
-  };
 
   const handleSave = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("No token found. Please log in.");
-      }
-        const response = await fetch("http://87.242.103.34:5000/user/updateme", {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              purpose: surveyData.purpose,
-              self_assessment_lvl: surveyData.experience,
-              preferred_communication: surveyData.preferred_communication,
-              hours_per_week: Number(surveyData.hours_per_week),
-            }),
-          });
-      
+    if (!steps.every(step => step.validation())) return;
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log("Данные успешно отправлены:", result);
-        alert("Данные успешно сохранены!");
-      } else {
-        console.error("Ошибка при отправке данных:", response.status);
-        alert("Не удалось сохранить данные. Попробуйте снова.");
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_BASE_URL}/user/survey`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(surveyData),
+      });
+      
+      if (!response.ok) {
+        throw new Error("Ошибка при сохранении данных");
       }
+
+      alert("Данные успешно сохранены!");
     } catch (error) {
-      console.error("Ошибка сети:", error);
-      alert("Произошла ошибка. Проверьте соединение с сетью.");
+      console.error("Ошибка сохранения:", error);
+      alert("Не удалось сохранить данные");
     }
   };
 
@@ -803,12 +283,26 @@ function Survey() {
       <h2>{steps[currentStep].title}</h2>
       <div className="survey-content">{steps[currentStep].content}</div>
       <div className="survey-navigation">
-        {currentStep > 0 && <button onClick={goToPreviousStep}>Назад</button>}
-        {currentStep < steps.length - 1 && (
-          <button onClick={goToNextStep}>Далее</button>
+        {currentStep > 0 && (
+          <button onClick={goToPreviousStep}>Назад</button>
         )}
+        
+        {currentStep < steps.length - 1 && (
+          <button 
+            onClick={goToNextStep}
+            disabled={!steps[currentStep].validation()}
+          >
+            Далее
+          </button>
+        )}
+        
         {currentStep === steps.length - 1 && (
-          <button onClick={handleSave}>Сохранить</button>
+          <button 
+            onClick={handleSave}
+            disabled={!steps[currentStep].validation()}
+          >
+            Сохранить
+          </button>
         )}
       </div>
     </div>

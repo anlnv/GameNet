@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import './users.css';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 function Users() {
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -10,7 +12,7 @@ function Users() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://87.242.103.34:5000/user');
+        const response = await fetch(`${API_BASE_URL}/user`);
         const data = await response.json();
         setUsers(data.users);
         setFilteredUsers(data.users); // Изначально показываем всех пользователей
