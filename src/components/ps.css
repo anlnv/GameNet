@@ -11,7 +11,7 @@
   display: flex;
   justify-content: space-between;
   gap: 15px;
-  margin-bottom: 25px;
+  /*margin-bottom: 25px;*/
   padding: 10px;
   background: #3a3a3a;
   border-radius: 8px;
@@ -53,7 +53,8 @@
 }
 
 .save-btn {
-  margin-top: 20px;
+  /*margin-top: 5px;*/
+  margin-bottom: 10px;
   padding: 12px 25px;
   background: #7289da;
   color: white;
@@ -150,8 +151,7 @@
 
 /* Дополнительные стили для текстареа */
 .input-group textarea {
-  resize: vertical;
-  height: 50px;
+  height: 30px;
 }
 
 /* Стили для кнопки "Connect Steam" */

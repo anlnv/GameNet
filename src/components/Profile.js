@@ -11,13 +11,19 @@ function Profile({ profileData }) {
   const [loadingAvatar, setLoadingAvatar] = useState(true);
   const [followersCount, setFollowersCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
-  const [communityCount, setCommunityCount] = useState(0);
   const [followersList, setFollowersList] = useState([]);
   const [followingList, setFollowingList] = useState([]);
   const [communityList, setCommunityList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState(""); // 'followers', 'following', or 'communities'
   const navigate = useNavigate();
+
+  
+  const [games, setGames] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const gamesCount = games.length;
 
   const [showAllGames, setShowAllGames] = useState(false);
   const allGames = [
@@ -28,7 +34,7 @@ function Profile({ profileData }) {
     "Dragon Realm", "Racing Pro", "Zombie Survival",
     "Mystery Island", "Football Stars", "Cooking Fever",
   ];
-  const displayedGames = showAllGames ? allGames : allGames.slice(0, 12);
+  const displayedGames = showAllGames ? games : games.slice(0, 12);
 
     const contacts = [
       { platform: "Discord", icon: <FaDiscord />, username: profileData.contacts.discord },
@@ -37,6 +43,9 @@ function Profile({ profileData }) {
     ];
 
     const age = profileData.dob ? calculateAge(profileData.dob) : "";
+
+
+
 
   // Fetch avatar
 useEffect(() => {
@@ -79,7 +88,6 @@ useEffect(() => {
           );
           const followingData = await followingResponse.json();
           setFollowingCount(followingData.users?.length || 0);
-          setCommunityCount(followingData.communities?.length || 0);
           setFollowingList(followingData.users || []);
           setCommunityList(followingData.communities || []);
         } catch (error) {
@@ -88,7 +96,6 @@ useEffect(() => {
       }
     };
     fetchFollowData();
-    console.log(profileData)
   }, [profileData]);
 
 
@@ -119,11 +126,87 @@ useEffect(() => {
     return age;
   }
 
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+  
+        const getResponse = await fetch(
+          `${API_BASE_URL}/ext/steam/${profileData.id}/games`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+  
+        if (getResponse.ok) {
+          const data = await getResponse.json();
+          setGames(data || []);
+          setLoading(false);
+          console.log(data)
+          return;
+        }
+  
+        const getError = await getResponse.json();
+        if (getError.detail === 'No data for this user') {
+          // 3. Делаем POST для подключения
+          const postResponse = await fetch(
+            `${API_BASE_URL}/ext/steam/${profileData.id}/`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            }
+          );
+  
+          if (!postResponse.ok) {
+            const postError = await postResponse.json();
+            if (postError.detail === 'No data for this user') {
+              setError('Steam не подключен');
+            } else {
+              setError('Ошибка при подключении Steam');
+            }
+            setLoading(false);
+            return;
+          }
+  
+          const secondGetResponse = await fetch(
+            `${API_BASE_URL}/ext/steam/${profileData.id}/games`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            }
+          );
+  
+          if (secondGetResponse.ok) {
+            const data = await secondGetResponse.json();
+            setGames(data || []);
+          } else {
+            setError('Steam не подключен');
+          }
+        } else {
+          setError('Неизвестная ошибка');
+        }
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+    fetchGames();
+    console.log(games)
+  }, [profileData]);
+
+
+
   if (!profileData) {
     return <div>Loading...</div>;
   }
-
-  console.log(avatarUrl)
 
   return (
     <div className="profile">
@@ -144,7 +227,7 @@ useEffect(() => {
             <span className="profile__gender">{profileData.gender || "Не указан"}</span>
             <span className="profile__age">{profileData.dob ? `, ${age}` : " "}</span>
           </p>
-          <p className="profile__bio">{profileData.bio || " "}</p>
+          <p className="profile__bio">{profileData.description || " "}</p>
         </div>
       </div>
 
@@ -152,13 +235,13 @@ useEffect(() => {
 
       <div className="profile__stats">
         <div className="profile__stat" onClick={() => openModal("followers")}>
-          13 <p className="profile__stat-text">Followers</p>
+          {followersCount} <p className="profile__stat-text">Followers</p>
         </div>
         <div className="profile__stat" onClick={() => openModal("following")}>
-          21 <p className="profile__stat-text">Following</p>
+          {followingCount} <p className="profile__stat-text">Following</p>
         </div>
-        <div className="profile__stat" onClick={() => openModal("communities")}>
-          29 <p className="profile__stat-text">Games</p>
+        <div className="profile__stat">
+          {gamesCount}<p className="profile__stat-text">Games</p>
         </div>
       </div>
 
@@ -243,6 +326,7 @@ useEffect(() => {
           </div>
         </div>
       )}
+
     </div>
   );
 }

@@ -354,7 +354,7 @@ const ProfileSettings = ({ profileData, updateProfile }) => {
     personal: {
       username: profileData?.username || '',
       birthDate: profileData?.dob || '',
-      bio: profileData?.bio || '',
+      bio: profileData?.description || ''
     },
     contacts: {
       telegram: profileData?.contacts?.telegram || '',
@@ -368,17 +368,20 @@ const ProfileSettings = ({ profileData, updateProfile }) => {
     }
   });
 
-  const [avatarFile, setAvatarFile] = useState(null); // Новое состояние для аватара
+  const [avatarFile, setAvatarFile] = useState(null); // Для аватара
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingCredits, setIsLoadingCredits] = useState(false);
+  const [isLoadingAvatar, setIsLoadingAvatar] = useState(false);
 
+  // Смена вкладки
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setErrors({});
     setSuccessMessage('');
   };
 
+  // Обновление данных форм
   const handleChange = (tab, field, value) => {
     setFormData(prev => ({
       ...prev,
@@ -389,169 +392,212 @@ const ProfileSettings = ({ profileData, updateProfile }) => {
     }));
   };
 
-  const validatePassword = () => {
-    const { newPassword, confirmPassword } = formData.password;
-    return newPassword === confirmPassword ? '' : 'Passwords do not match';
-  };
-
-  const handleSubmit = async (tab) => {
-    setIsLoading(true);
+  // 1. Обработчик для основных данных (username, birthDate, bio)
+  const handleSavePersonal = async () => {
+    setIsLoadingCredits(true);
     setErrors({});
 
     try {
       const token = localStorage.getItem('token');
-
-      if (tab === 'personal') {
-        const payload = new FormData();
-
-        // Поля для персональных данных
-        payload.append('new_username', 
+      const payload = {
+        new_username: 
           formData.personal.username !== profileData.username 
             ? formData.personal.username 
-            : null
-        );
-
-        payload.append('new_dob', 
+            : null,
+        new_dob: 
           formData.personal.birthDate !== profileData.dob 
             ? formData.personal.birthDate 
-            : null
-        );
-
-        payload.append('new_bio', 
-          formData.personal.bio !== profileData.bio 
+            : null,
+        new_bio: 
+          formData.personal.bio !== profileData.description 
             ? formData.personal.bio 
             : null
-        );
+      };
 
-        // Добавление аватара
-        if (avatarFile) {
-          payload.append('new_avatar', avatarFile);
-        } else {
-          payload.append('new_avatar', null);
-        }
-
-        // Проверка на наличие изменений
-        if (
-          payload.get('new_username') === null &&
-          payload.get('new_dob') === null &&
-          payload.get('new_bio') === null
-        ) {
-          throw new Error("No changes detected");
-        }
-
-        const response = await fetch(
-          `${API_BASE_URL}/user/credits`,
-          {
-            method: 'PATCH',
-            headers: {
-              Authorization: `Bearer ${token}`
-            },
-            body: payload
-          }
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to update');
-        }
-
-        // Обновление данных профиля
-        const updatedData = {
-          username: formData.personal.username,
-          dob: formData.personal.birthDate,
-          bio: formData.personal.bio,
-        };
-        await updateProfile(updatedData);
-        setSuccessMessage('Profile updated successfully!');
-      } else if (tab === 'contacts') {
-        // Логика для контактов (оставлена без изменений)
-        const payload = {
-          telegram: formData.contacts.telegram !== profileData.contacts?.telegram 
-            ? formData.contacts.telegram 
-            : null,
-          discord: formData.contacts.discord !== profileData.contacts?.discord 
-            ? formData.contacts.discord 
-            : null,
-          steam: formData.contacts.steam !== profileData.contacts?.steam 
-            ? formData.contacts.steam 
-            : null
-        };
-
-        if (Object.values(payload).every(v => v === null)) {
-          throw new Error("No changes detected");
-        }
-
-        const response = await fetch(
-          `${API_BASE_URL}/user/contacts`,
-          {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(payload)
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to update contacts');
-        }
-
-        const updatedContacts = {};
-        Object.entries(payload).forEach(([key, value]) => {
-          if (value !== null) {
-            updatedContacts[key] = value;
-          }
-        });
-        
-        await updateProfile({ contacts: updatedContacts });
-        setSuccessMessage("Contacts updated successfully!");
-      } else if (tab === 'password') {
-        const passwordError = validatePassword();
-        if (passwordError) {
-          setErrors({ password: passwordError });
-          setIsLoading(false);
-          return;
-        }
-
-        const payload = {
-          current_password: formData.password.currentPassword,
-          new_password: formData.password.newPassword
-        };
-
-        const response = await fetch(
-          `${API_BASE_URL}/user/change-password`,
-          {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(payload)
-          }
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to change password');
-        }
-
-        setSuccessMessage('Password changed successfully!');
-        setFormData(prev => ({
-          ...prev,
-          password: {
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: ''
-          }
-        }));
+      // Проверка на отсутствие изменений
+      if (Object.values(payload).every(v => v === null)) {
+        throw new Error("No changes detected");
       }
 
-      setTimeout(() => setSuccessMessage(''), 3000);
+      const response = await fetch(
+        `${API_BASE_URL}/user/credits`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update personal info');
+      }
+
+      const updatedData = {
+        username: payload.new_username || profileData.username,
+        dob: payload.new_dob || profileData.dob,
+        bio: payload.new_bio || profileData.description
+      };
+
+      await updateProfile({ ...profileData, ...updatedData });
+      setSuccessMessage('Personal info updated successfully!');
     } catch (error) {
       setErrors({ common: error.message });
     } finally {
-      setIsLoading(false);
+      setIsLoadingCredits(false);
+    }
+  };
+
+  // 2. Обработчик для аватара
+  const handleUpdateAvatar = async () => {
+    setIsLoadingAvatar(true);
+    setErrors({});
+
+    if (!avatarFile) {
+      throw new Error("Avatar file is required");
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const formDataAvatar = new FormData();
+      formDataAvatar.append('new_avatar', avatarFile);
+
+      const response = await fetch(
+        `${API_BASE_URL}/user/avatar`,
+        {
+          method: 'PATCH',
+          headers: { Authorization: `Bearer ${token}` },
+          body: formDataAvatar
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Avatar update failed');
+      }
+
+      const data = await response.json();
+      await updateProfile({ avatar: data.avatar_url });
+      setSuccessMessage('Avatar updated successfully!');
+      setAvatarFile(null); // Очистить выбранный файл
+    } catch (error) {
+      setErrors({ common: error.message });
+    } finally {
+      setIsLoadingAvatar(false);
+    }
+  };
+
+  // 3. Обработчик для контактов
+  const handleSaveContacts = async () => {
+    setIsLoadingCredits(true);
+    setErrors({});
+
+    try {
+      const token = localStorage.getItem('token');
+      const payload = {
+        telegram: 
+          formData.contacts.telegram !== profileData.contacts?.telegram 
+            ? formData.contacts.telegram 
+            : null,
+        discord: 
+          formData.contacts.discord !== profileData.contacts?.discord 
+            ? formData.contacts.discord 
+            : null,
+        steam: 
+          formData.contacts.steam !== profileData.contacts?.steam 
+            ? formData.contacts.steam 
+            : null
+      };
+
+      if (Object.values(payload).every(v => v === null)) {
+        throw new Error("No changes detected");
+      }
+
+      const response = await fetch(
+        `${API_BASE_URL}/user/contacts`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update contacts');
+      }
+
+      const updatedContacts = {};
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value !== null) {
+          updatedContacts[key] = value;
+        }
+      });
+
+      await updateProfile({ contacts: updatedContacts });
+      setSuccessMessage('Contacts updated successfully!');
+    } catch (error) {
+      setErrors({ common: error.message });
+    } finally {
+      setIsLoadingCredits(false);
+    }
+  };
+
+  // 4. Обработчик для пароля
+  const handlePasswordSubmit = async () => {
+    setIsLoadingCredits(true);
+    setErrors({});
+
+    const { newPassword, confirmPassword } = formData.password;
+    if (newPassword !== confirmPassword) {
+      setErrors({ password: 'Passwords do not match' });
+      setIsLoadingCredits(false);
+      return;
+    }
+
+    if (!newPassword) {
+      throw new Error("New password is required");
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const payload = {
+        current_password: formData.password.currentPassword,
+        new_password: newPassword
+      };
+
+      const response = await fetch(
+        `${API_BASE_URL}/user/change-password`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Password change failed');
+      }
+
+      setSuccessMessage('Password changed successfully!');
+      setFormData(prev => ({
+        ...prev,
+        password: { currentPassword: '', newPassword: '', confirmPassword: '' }
+      }));
+    } catch (error) {
+      setErrors({ common: error.message });
+    } finally {
+      setIsLoadingCredits(false);
     }
   };
 
@@ -585,74 +631,73 @@ const ProfileSettings = ({ profileData, updateProfile }) => {
       </div>
 
       <div className="settings-content">
-        {/* Персональные данные */}
+        {/* Вкладка Personal Information */}
         {activeTab === 'personal' && (
           <div className="personal-tab">
-            <div className="input-group">
-              <label>Username</label>
-              <input 
-                type="text"
-                value={formData.personal.username}
-                onChange={e => handleChange('personal', 'username', e.target.value)}
-              />
-            </div>
-
-            <div className="input-group">
-              <label>Date of Birth</label>
-              <input 
-                type="date"
-                value={formData.personal.birthDate}
-                onChange={e => handleChange('personal', 'birthDate', e.target.value)}
-              />
-            </div>
-
-            {/* Новое поле для bio */}
-            <div className="input-group">
-              <label>Bio</label>
-              <textarea 
-                className="bio-input"
-                value={formData.personal.bio}
-                onChange={e => handleChange('personal', 'bio', e.target.value)}
-              />
-            </div>
-
-            <button 
-              className="save-btn"
-              onClick={() => handleSubmit('personal')}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Saving...' : 'Save Changes'}
-            </button>
-
-              {/* Новое поле для аватара */}
-            <div className="input-group avatar-input">
-              <label>Avatar</label>
-              <input 
-                type="file" 
-                accept="image/*"
-                onChange={(e) => setAvatarFile(e.target.files[0])}
-              />
-              {avatarFile && (
-                <img 
-                  src={URL.createObjectURL(avatarFile)} 
-                  alt="Preview"
-                  className="avatar-preview"
+            {/* Блок 1: Основные данные */}
+            <div className="personal-group">
+              <div className="input-group">
+                <label>Username</label>
+                <input 
+                  type="text"
+                  value={formData.personal.username}
+                  onChange={e => handleChange('personal', 'username', e.target.value)}
                 />
-              )}
+              </div>
+              <div className="input-group">
+                <label>Date of Birth</label>
+                <input 
+                  type="date"
+                  value={formData.personal.birthDate}
+                  onChange={e => handleChange('personal', 'birthDate', e.target.value)}
+                />
+              </div>
+              <div className="input-group">
+                <label>Bio</label>
+                <textarea 
+                  className="bio-input"
+                  value={formData.personal.bio}
+                  onChange={e => handleChange('personal', 'bio', e.target.value)}
+                />
+              </div>
+              <button 
+                className="save-btn"
+                onClick={handleSavePersonal}
+                disabled={isLoadingCredits}
+              >
+                {isLoadingCredits ? 'Saving...' : 'Save Changes'}
+              </button>
             </div>
 
-            <button 
-              className="save-btn"
-              onClick={() => handleSubmit('personal')}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Saving...' : 'Save Changes'}
-            </button>
-
+            {/* Блок 2: Обновление аватара */}
+            <div className="avatar-group" style={{ marginTop: '40px' }}>
+              <div className="input-group">
+                <label>Avatar</label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  onChange={(e) => setAvatarFile(e.target.files[0])}
+                />
+                {avatarFile && (
+                  <img 
+                    src={URL.createObjectURL(avatarFile)} 
+                    alt="Preview" 
+                    className="avatar-preview"
+                  />
+                )}
+              </div>
+              <button 
+                className="save-btn"
+                onClick={handleUpdateAvatar}
+                disabled={!avatarFile || isLoadingAvatar}
+              >
+                {isLoadingAvatar ? 'Updating...' : 'Update Avatar'}
+              </button>
+            </div>
           </div>
         )}
 
-        {/* Контакты */}
+        {/* Вкладка Contacts */}
         {activeTab === 'contacts' && (
           <div className="contacts-tab">
             <div className="input-group">
@@ -681,15 +726,15 @@ const ProfileSettings = ({ profileData, updateProfile }) => {
             </div>
             <button 
               className="save-btn"
-              onClick={() => handleSubmit('contacts')}
-              disabled={isLoading}
+              onClick={handleSaveContacts}
+              disabled={isLoadingCredits}
             >
-              {isLoading ? 'Saving...' : 'Save Changes'}
+              {isLoadingCredits ? 'Saving...' : 'Save Contacts'}
             </button>
           </div>
         )}
 
-        {/* Изменение пароля */}
+        {/* Вкладка Password */}
         {activeTab === 'password' && (
           <div className="password-tab">
             <div className="input-group">
@@ -719,20 +764,19 @@ const ProfileSettings = ({ profileData, updateProfile }) => {
             {errors.password && <p className="error">{errors.password}</p>}
             <button 
               className="save-btn"
-              onClick={() => handleSubmit('password')}
+              onClick={handlePasswordSubmit}
               disabled={
-                isLoading || 
+                isLoadingCredits || 
                 !formData.password.newPassword || 
-                !formData.password.confirmPassword || 
-                validatePassword()
+                formData.password.newPassword !== formData.password.confirmPassword
               }
             >
-              {isLoading ? 'Updating...' : 'Change Password'}
+              {isLoadingCredits ? 'Updating...' : 'Change Password'}
             </button>
           </div>
         )}
 
-        {/* Steam Integration (оставлено без изменений) */}
+        {/* Вкладка Steam Integration */}
         {activeTab === 'steam' && (
           <div className="steam-tab">
             <p>To connect Steam, click the button below:</p>

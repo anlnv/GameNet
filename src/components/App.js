@@ -504,7 +504,6 @@ function App() {
     }
     setIsAuthChecked(true);
     setLoading(false);
-    console.log(token);
   };
 
   // Выполняем проверку токена при загрузке приложения
@@ -556,7 +555,6 @@ function App() {
                 </div>
               }
             />
-            <Route path="/feed" element={<Feed />} />
             <Route
               path="/profile-settings"
               element={
@@ -568,9 +566,7 @@ function App() {
             />
             <Route path="/survey" element={<Survey />} />
             <Route path="/finder" element={<Finder profileData={profileData} />} />
-            <Route path="/communities" element={<Communities profileData={profileData}/>} />
             <Route path="/users" element={<Users />} />
-            <Route path="/community/:id" element={<CommunityDetails profileData={profileData} />} />
             <Route path="/user/:userId" element={<User currentUser={profileData}/>} />
             <Route path="*" element={<Navigate to="/home" />} />
           </>
