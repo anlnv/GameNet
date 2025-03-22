@@ -1,4 +1,4 @@
-/* Общий контейнер */
+
 .auth-container {
     max-width: 400px;
     margin: auto;
@@ -9,7 +9,6 @@
     text-align: center;
   }
   
-  /* Заголовок формы */
   .auth-title {
     font-size: 1.8em;
     margin-bottom: 10px;
@@ -17,13 +16,11 @@
     color: #333333;
   }
   
-  /* Группы ввода */
   .auth-input-group {
     margin-bottom: 15px;
     text-align: left;
   }
   
-  /* Метка для ввода */
   .auth-label {
     font-size: 0.9em;
     color: #555555;
@@ -31,7 +28,6 @@
     margin-bottom: 5px;
   }
   
-  /* Поля ввода */
   .auth-input {
     width: 95%;
     padding: 10px;
@@ -55,7 +51,6 @@
     outline: none;
   }
   
-  /* Кнопка */
   .auth-button {
     width: 100%;
     padding: 10px 15px;
@@ -72,14 +67,12 @@
     background-color: #0056b3;
   }
   
-  /* Ошибки */
   .auth-error {
     color: #d9534f;
     font-size: 0.9em;
     margin-bottom: 10px;
   }
   
-  /* Ссылки */
   .auth-footer {
     font-size: 0.9em;
     margin-top: 15px;

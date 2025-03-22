@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './users.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -7,15 +8,15 @@ function Users() {
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const navigate = useNavigate();
 
-  // Получаем список пользователей с сервера
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/user`);
         const data = await response.json();
         setUsers(data.users);
-        setFilteredUsers(data.users); // Изначально показываем всех пользователей
+        setFilteredUsers(data.users);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
@@ -23,12 +24,10 @@ function Users() {
     fetchUsers();
   }, []);
 
-  // Обработчик поиска
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
 
-    // Фильтрация пользователей по имени
     const filtered = users.filter(user =>
       user.username.toLowerCase().includes(query.toLowerCase())
     );
@@ -48,7 +47,7 @@ function Users() {
       <div className="users-list">
         {filteredUsers.length > 0 ? (
           filteredUsers.map(user => (
-            <div key={user.id} className="user-card">
+            <div key={user.id} className="user-card" onClick={() => navigate(`/user/${user.id}`)}>
               {user.avatar_url ? (
                 <img
                   src={user.avatar_url}

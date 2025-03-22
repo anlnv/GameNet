@@ -65,53 +65,36 @@
 
 .modal__close {
   position: absolute;
-  /* Позиционируем кнопку относительно модального окна */
   top: 10px;
-  /* Расстояние от верхнего края */
   right: 1px;
-  /* Расстояние от правого края */
   width: 40px;
-  /* Увеличиваем размер кнопки */
   height: 40px;
-  /* Увеличиваем размер кнопки */
   background-color: transparent;
-  /* Прозрачный фон для кнопки */
   border: none;
-  /* Убираем рамку */
   cursor: pointer;
-  /* Указатель мыши */
   justify-content: center;
-  /* Центрирование содержимого по горизонтали */
   align-items: center;
-  /* Центрирование содержимого по вертикали */
 }
 
 .modal__close img {
   width: 80%;
-  /* Устанавливаем изображение чуть меньше размера кнопки */
   height: 80%;
-  /* Устанавливаем изображение чуть меньше размера кнопки */
   display: block;
-  /* Убираем дополнительные отступы */
 }
 
 .modal__close:hover img {
   filter: brightness(0.8);
-  /* Затемнение изображения при наведении */
   transform: scale(1.1);
-  /* Легкое увеличение при наведении */
 }
 
 .modal__content {
   background-color: #2a2a2a;
-  /* Цвет фона модального окна */
   padding: 20px;
   border-radius: 10px;
   width: 300px;
   max-height: 400px;
   overflow-y: auto;
   position: relative;
-  /* Для правильного позиционирования кнопки */
 }
 
 
@@ -165,7 +148,6 @@ li {
   margin-top: 10px;
   padding: 6px 12px;
   background: #414a9d;
-  /* Ярко-синий цвет */
   color: #fff;
   border: none;
   cursor: pointer;
@@ -220,7 +202,6 @@ li {
   display: flex;
   flex-direction: row;
   gap: 10px;
-  /*justify-content: space-between;*/
 }
 
 .contacts__item {
@@ -229,10 +210,8 @@ li {
   align-items: center;
   gap: 12px;
   padding: 10px;
-  /*background: #1e1e2e;*/
   border-radius: 8px;
   transition: background 0.2s ease, transform 0.2s ease;
-  /*border: #97b7f6 0.5px solid;*/
   border: 1px solid rgba(64, 69, 79, 1);
   justify-content: center;
 }

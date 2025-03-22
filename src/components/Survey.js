@@ -19,13 +19,6 @@ function Survey() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const gameOptions = [
-    "Counter-Strike", "Dota 2", "League of Legends",
-    "World of Warcraft", "Valorant", "Fortnite",
-    "Apex Legends", "Call of Duty", "Genshin Impact",
-    "Minecraft", "Overwatch 2", "Rocket League"
-  ];
-
   const filteredGames = games.filter(game =>
     game.toLowerCase().includes(searchQuery.toLowerCase())
   );

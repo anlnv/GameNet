@@ -11,7 +11,6 @@
   display: flex;
   justify-content: space-between;
   gap: 15px;
-  /*margin-bottom: 25px;*/
   padding: 10px;
   background: #3a3a3a;
   border-radius: 8px;
@@ -53,7 +52,6 @@
 }
 
 .save-btn {
-  /*margin-top: 5px;*/
   margin-bottom: 10px;
   padding: 12px 25px;
   background: #7289da;
@@ -94,7 +92,6 @@
   margin-bottom: 15px;
 }
 
-/* Стили для аватара */
 .avatar-input {
   display: flex;
   flex-direction: column;
@@ -109,18 +106,15 @@
   margin-top: 5px;
 }
 
-/* Стили для био */
 .bio-input {
   resize: none;
   height: 100px;
 }
 
-/* Общий контейнер для вкладок */
 .settings-content {
   padding: 20px;
 }
 
-/* Исправленные стили для input-group */
 .input-group {
   margin-bottom: 15px;
 }
@@ -149,17 +143,14 @@
   border-color: #7289da;
 }
 
-/* Дополнительные стили для текстареа */
 .input-group textarea {
   height: 30px;
 }
 
-/* Стили для кнопки "Connect Steam" */
 .steam-tab button.save-btn {
   margin-top: 20px;
 }
 
-/* Центрирование превью аватара */
 .avatar-input img {
   align-self: center;
 }

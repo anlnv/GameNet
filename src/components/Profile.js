@@ -15,10 +15,10 @@ function Profile({ profileData }) {
   const [followingList, setFollowingList] = useState([]);
   const [communityList, setCommunityList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState(""); // 'followers', 'following', or 'communities'
+  const [modalType, setModalType] = useState("");
   const navigate = useNavigate();
 
-  
+
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,51 +27,41 @@ function Profile({ profileData }) {
 
   const [showAllGames, setShowAllGames] = useState(false);
   const allGames = [
-    "Cyber Adventure", "Space Warriors", "Magic Quest", 
+    "Cyber Adventure", "Space Warriors", "Magic Quest",
     "Dragon Realm", "Racing Pro", "Zombie Survival",
     "Mystery Island", "Football Stars", "Cooking Fever",
-    "City Builder", "Alien Invasion", "Puzzle Master", 
+    "City Builder", "Alien Invasion", "Puzzle Master",
     "Dragon Realm", "Racing Pro", "Zombie Survival",
     "Mystery Island", "Football Stars", "Cooking Fever",
   ];
   const displayedGames = showAllGames ? games : games.slice(0, 12);
 
-    const contacts = [
-      { platform: "Discord", icon: <FaDiscord />, username: profileData.contacts.discord },
-      { platform: "Steam", icon: <FaSteam />, username: profileData.contacts.steam },
-      { platform: "Telegram", icon: <FaTelegram />, username: profileData.contacts.telegram },
-    ];
-
-    const age = profileData.dob ? calculateAge(profileData.dob) : "";
-
-
 
 
   // Fetch avatar
-useEffect(() => {
-  const fetchAvatar = async () => {
-    if (profileData && profileData.id) {
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/user/${profileData.id}/avatar`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch avatar");
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      if (profileData && profileData.id) {
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/user/${profileData.id}/avatar`
+          );
+          if (!response.ok) {
+            throw new Error("Failed to fetch avatar");
+          }
+          const data = await response.json();
+          setAvatarUrl(data.avatar_url !== "no avatar" ? data.avatar_url : null);
+        } catch (error) {
+          console.error("Error fetching avatar:", error);
+          setAvatarUrl(null);
         }
-        const data = await response.json();
-        setAvatarUrl(data.avatar_url !== "no avatar" ? data.avatar_url : null);
-      } catch (error) {
-        console.error("Error fetching avatar:", error);
-        setAvatarUrl(null);
       }
-    }
-    setLoadingAvatar(false);
-  };
-  fetchAvatar();
-}, [profileData]);
+      setLoadingAvatar(false);
+    };
+    fetchAvatar();
+  }, [profileData]);
 
 
-  // Fetch followers, following, and communities
   useEffect(() => {
     const fetchFollowData = async () => {
       if (profileData && profileData.id) {
@@ -118,11 +108,11 @@ useEffect(() => {
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-  
+
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-  
+
     return age;
   }
 
@@ -131,7 +121,7 @@ useEffect(() => {
       try {
         setLoading(true);
         setError(null);
-  
+
         const getResponse = await fetch(
           `${API_BASE_URL}/ext/steam/${profileData.id}/games`,
           {
@@ -140,18 +130,16 @@ useEffect(() => {
             },
           }
         );
-  
+
         if (getResponse.ok) {
           const data = await getResponse.json();
           setGames(data || []);
           setLoading(false);
-          console.log(data)
           return;
         }
-  
+
         const getError = await getResponse.json();
         if (getError.detail === 'No data for this user') {
-          // 3. Делаем POST для подключения
           const postResponse = await fetch(
             `${API_BASE_URL}/ext/steam/${profileData.id}/`,
             {
@@ -162,7 +150,7 @@ useEffect(() => {
               },
             }
           );
-  
+
           if (!postResponse.ok) {
             const postError = await postResponse.json();
             if (postError.detail === 'No data for this user') {
@@ -173,7 +161,7 @@ useEffect(() => {
             setLoading(false);
             return;
           }
-  
+
           const secondGetResponse = await fetch(
             `${API_BASE_URL}/ext/steam/${profileData.id}/games`,
             {
@@ -182,7 +170,7 @@ useEffect(() => {
               },
             }
           );
-  
+
           if (secondGetResponse.ok) {
             const data = await secondGetResponse.json();
             setGames(data || []);
@@ -208,6 +196,14 @@ useEffect(() => {
     return <div>Loading...</div>;
   }
 
+  const contacts = [
+    { platform: "Discord", icon: <FaDiscord />, username: profileData.contacts.discord },
+    { platform: "Steam", icon: <FaSteam />, username: profileData.contacts.steam },
+    { platform: "Telegram", icon: <FaTelegram />, username: profileData.contacts.telegram },
+  ];
+
+   const age = profileData.dob ? calculateAge(profileData.dob) : "";
+
   return (
     <div className="profile">
       <div className="profile__info">
@@ -231,8 +227,6 @@ useEffect(() => {
         </div>
       </div>
 
-     
-
       <div className="profile__stats">
         <div className="profile__stat" onClick={() => openModal("followers")}>
           {followersCount} <p className="profile__stat-text">Followers</p>
@@ -245,38 +239,36 @@ useEffect(() => {
         </div>
       </div>
 
+      <section className="section">
+        <h2 className="section-title">Games</h2>
+        <div className="games-container">
+          {displayedGames.map((game, index) => (
+            <div key={index} className="game-item">
+              {game}
+            </div>
+          ))}
+        </div>
+        {allGames.length > 12 && (
+          <button
+            className="show-more-btn"
+            onClick={() => setShowAllGames(!showAllGames)}
+          >
+            {showAllGames ? "Show less" : "Show all"}
+            <span className={`arrow ${showAllGames ? "up" : "down"}`} />
+          </button>
+        )}
+      </section>
 
-        <section className="section">
-          <h2 className="section-title">Games</h2>
-          <div className="games-container">
-            {displayedGames.map((game, index) => (
-              <div key={index} className="game-item">
-                {game}
-              </div>
-            ))}
-          </div>
-          {allGames.length > 12 && (
-            <button
-              className="show-more-btn"
-              onClick={() => setShowAllGames(!showAllGames)}
-            >
-              {showAllGames ? "Show less" : "Show all"}
-              <span className={`arrow ${showAllGames ? "up" : "down"}`} />
-            </button>
-          )}
-        </section>
-      
-        <div className="section">
-      <ul className="contacts__list">
-        {contacts.map((contact, index) => (
-          <li key={index} className="contacts__item">
-            <span className="contacts__icon">{contact.icon}</span>
-            <span className="contacts__username">{contact.username}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-      
+      <div className="section">
+        <ul className="contacts__list">
+          {contacts.map((contact, index) => (
+            <li key={index} className="contacts__item">
+              <span className="contacts__icon">{contact.icon}</span>
+              <span className="contacts__username">{contact.username}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {isModalOpen && (
         <div className="modal" onClick={closeModal}>
@@ -288,8 +280,8 @@ useEffect(() => {
               {modalType === "followers"
                 ? "Followers"
                 : modalType === "following"
-                ? "Following"
-                : "Communities"}
+                  ? "Following"
+                  : "Communities"}
             </h2>
             <ul>
               {modalType === "followers" &&

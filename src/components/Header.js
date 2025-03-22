@@ -5,7 +5,7 @@ import './logout.css';
 
 function Header(props) {
   const [showSettings, setShowSettings] = useState(false);
-  const navigate = useNavigate(); // Для перенаправления
+  const navigate = useNavigate();
   let hideTimeout = null;
 
   const handleMouseEnter = () => {
@@ -20,7 +20,7 @@ function Header(props) {
   };
 
   const handleSearchClick = () => {
-    navigate('/users'); // Перенаправляем на страницу поиска пользователей
+    navigate('/users');
   };
 
   return (
